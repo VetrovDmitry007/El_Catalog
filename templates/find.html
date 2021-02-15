@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма поиска</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="container">
+<div class="bor-foms" style="border-width: 1px; margin-top: 10px;">
+<form action="/find" method="post">
+
+<div class="row">
+    <div class="col-11 col-sm-5">
+    <label class="form-label"></label>
+    <select name="select_1" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="200_A" selected>Заглавие</option>
+        <option value="200_F">Автор</option>
+        <option value="200_C">Издательство</option>
+        <option value="SUJET">Рубрика</option>
+        <option value="THESAURUS">Название тезауруса</option>
+        <option value="010_A">ISBN</option>
+    </select>
+    </div>
+    <div class="col-11 col-sm-5">
+        <label class="form-label"></label>
+        <input name="edit_1" type="text" class="form-control" placeholder="Значение поля">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 col-sm-1">
+    <label class="form-label"></label>
+    <select name="select_2_0" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="no" selected>-</option>
+        <option value="and">И</option>
+    </select>
+    </div>
+    <div class="col-9 col-sm-4">
+    <label class="form-label"></label>
+    <select name="select_2" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="200_A" >Заглавие</option>
+        <option value="200_F" selected>Автор</option>
+        <option value="200_C">Издательство</option>
+        <option value="SUJET">Рубрика</option>
+        <option value="THESAURUS">Название тезауруса</option>
+        <option value="010_A">ISBN</option>
+    </select>
+    </div>
+    <div class="col-11 col-sm-5">
+        <label class="form-label"></label>
+        <input name="edit_2" type="text" class="form-control" placeholder="Значение поля">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 col-sm-1">
+    <label class="form-label"></label>
+    <select name="select_3_0" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="no" selected>-</option>
+        <option value="and">И</option>
+    </select>
+    </div>
+    <div class="col-9 col-sm-4">
+    <label class="form-label"></label>
+    <select name="select_3" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="200_A" >Заглавие</option>
+        <option value="200_F">Автор</option>
+        <option value="200_C" selected>Издательство</option>
+        <option value="SUJET">Рубрика</option>
+        <option value="THESAURUS">Название тезауруса</option>
+        <option value="010_A">ISBN</option>
+    </select>
+    </div>
+    <div class="col-11 col-sm-5">
+        <label class="form-label"></label>
+        <input name="edit_3" type="text" class="form-control" placeholder="Значение поля">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 col-sm-1">
+    <label class="form-label"></label>
+    <select name="select_4_0" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="no" selected>-</option>
+        <option value="and">И</option>
+    </select>
+    </div>
+    <div class="col-9 col-sm-4">
+    <label class="form-label"></label>
+    <select name="select_4" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <option value="200_A" >Заглавие</option>
+        <option value="200_F">Автор</option>
+        <option value="200_C">Издательство</option>
+        <option value="SUJET" selected>Рубрика</option>
+        <option value="THESAURUS">Название тезауруса</option>
+        <option value="010_A">ISBN</option>
+    </select>
+    </div>
+    <div class="col-11 col-sm-5">
+        <label class="form-label"></label>
+        <input name="edit_4" type="text" class="form-control" placeholder="Значение поля">
+    </div>
+</div>
+
+
+<br>
+<div class="row">
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </div>
+</div>
+
+
+
+</form>
+</div>
+</div>
+
+<!-- Optional JavaScript -->
+    <!-- Popper.js first, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+</body>
+</html>
