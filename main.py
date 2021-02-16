@@ -24,7 +24,7 @@ def find():
         # print(type(request.form))
         # print(request.form)
         print(f1(request.form))
-        return request.form['select_1']
+        return render_template('tabResult.html')
 
 
 if __name__ == '__main__':
