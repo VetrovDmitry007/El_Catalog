@@ -1,4 +1,5 @@
 import pyodbc
+import random
 
 class Class_Sql:
 
@@ -35,14 +36,37 @@ class Class_Sql:
         ls_book = [col[0] for col in row]
         return ls_book
 
+    def getRnd(self, tag):
+        """
+        Выбор рандомной записи из словаря
+        :param tag: Тэг (100a or 245a or ... )
+        :return: Рандомная запись
+        """
+        cursor = self.cnxn.cursor()
+        sql = f'SELECT min(IDX_ID) as min_row, max(IDX_ID) as max_row FROM IDX{tag}'
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        min_id, max_id = row[0][0], row[0][1]
+        random.seed(random.randint(1,100))
+        # random.seed(1)
+        rnd_id = random.randint(min_id, max_id)
+        sql = f"SELECT TERM FROM IDX{tag} where IDX_ID = {rnd_id}"
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        return row[0][0]
+
 
 if __name__ == '__main__':
     from pprint import pprint
     marc = Class_Sql()
+    print(marc.getRnd('100a'))
+    print(marc.getRnd('100a'))
+    print(marc.getRnd('100a'))
+
     # ls_id = marc.getIdBook('100a', 'Аббасов, Т. Г.')
-    ls_id = marc.getIdBook('245a', 'Теория механизмов и машин')
+    # ls_id = marc.getIdBook('245a', 'Теория механизмов и машин')
     # ls_id = marc.getIdBook('245a', 'Экономика')
 
-    print(ls_id)
-    ls_book = marc.listBook(ls_id)
-    pprint(ls_book)
+    # print(ls_id)
+    # ls_book = marc.listBook(ls_id)
+    # pprint(ls_book)
