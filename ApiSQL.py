@@ -1,10 +1,16 @@
 import pyodbc
 import random
+from sys import platform
 
 class Class_Sql:
 
     def __init__(self):
-        self.cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=172.16.157.1;DATABASE=rb_mar;UID=sa;PWD=sql_admin')
+        if platform == 'linux':
+            self.cnxn = pyodbc.connect(
+                'DRIVER=FreeTDS; SERVER=172.16.157.1; PORT=1433; DATABASE=rb_mar; UID=sa; PWD=sql_admin; TDS_Version=8.0;')
+        else:
+            self.cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=172.16.157.1;DATABASE=rb_mar;UID=sa;PWD=sql_admin')
+
 
     def getIdBook(self, tag, val_tag, prec = True):
         """
