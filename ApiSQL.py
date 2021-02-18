@@ -25,6 +25,11 @@ class Class_Sql:
         return ls
 
     def listBook(self, ls_id):
+        """
+        Сисок книг по списку их id
+        :param ls_id:
+        :return: <class: list>
+        """
         cursor = self.cnxn.cursor()
         # sql = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
         ls_id = list(map(str, ls_id))
@@ -63,10 +68,3 @@ if __name__ == '__main__':
     print(marc.getRnd('100a'))
     print(marc.getRnd('100a'))
 
-    # ls_id = marc.getIdBook('100a', 'Аббасов, Т. Г.')
-    # ls_id = marc.getIdBook('245a', 'Теория механизмов и машин')
-    # ls_id = marc.getIdBook('245a', 'Экономика')
-
-    # print(ls_id)
-    # ls_book = marc.listBook(ls_id)
-    # pprint(ls_book)

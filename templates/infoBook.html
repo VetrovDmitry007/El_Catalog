@@ -11,7 +11,7 @@
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
 <link rel="stylesheet" href="https://bootstrap5.ru/css/docs.css">
-<link rel="stylesheet" href="{{ url_for( 'static', filename='css/tabResult.css')}}"/>
+<link rel="stylesheet" href="{{ url_for( 'static', filename='css/infoBook.css')}}"/>
 
 </head>
 
@@ -78,34 +78,30 @@
         </div>
       </div>
 
-      <h3 class="head_text">Результат поиска</h3>
-      <div class="table-responsive">
-        <table class="table table-striped table-hover table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Автор</th>
-              <th>Заглавие</th>
-              <th>Издательство</th>
-              <th>Объём</th>
-              <th>Макрообъект</th>
-            </tr>
-          </thead>
-          <tbody>
+      <h4 class="head_text">Информация о книге.</h4>
 
-          {% for book in ls_book %}
-            <tr>
-              <td> {{ loop.index }}</td>
-              <td>{{ book['100a'] }}</td>
-              <td> <a href="/book/{{ book['id']}}">{{ book['245a'] }}</a></td>
-              <td>{{ book['260b'] }}</td>
-              <td>{{ book['300a'] }}</td>
-              <td>sit</td>
-            </tr>
-            {%endfor%}
-          </tbody>
-        </table>
+      <div class="container">
+        <div class="row mb-3">
+          <label for="colFormLabel" class="col-sm-2 col-form-label">Заглавие</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="Теория механизммов и машин. Курсовое проектирование." readonly>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="colFormLabel" class="col-sm-2 col-form-label">Автор</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="Молчанов, В.И." readonly>
+          </div>
+        </div>
+
+      <div class="row mb-3">
+          <label for="colFormLabel" class="col-sm-2 col-form-label">Издательство</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="Изд-во Орел ГАУ" readonly>
+          </div>
       </div>
+
     </main>
   </div>
 </div>
