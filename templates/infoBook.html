@@ -23,7 +23,7 @@
   </button>
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Войти</a>
+      <a href="/exit" class="nav-link">Выйти</a>
     </li>
   </ul>
 </nav>
@@ -34,7 +34,7 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a href="/login" class="nav-link active" aria-current="page" href="#">
+            <a href="/login" class="nav-link active" aria-current="page">
               <span data-feather="home"></span>
               Поиск
             </a>
@@ -81,39 +81,65 @@
       <h4 class="head_text">Информация о книге.</h4>
 
       <div class="container">
-        <div class="row mb-3">
-          <label for="colFormLabel" class="col-sm-2 col-form-label">Заглавие</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" value="Теория механизммов и машин. Курсовое проектирование." readonly>
-          </div>
-        </div>
 
         <div class="row mb-3">
-          <label for="colFormLabel" class="col-sm-2 col-form-label">Автор</label>
+          <label  class="col-sm-2 col-form-label">Автор</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" value="Молчанов, В.И." readonly>
           </div>
         </div>
 
-      <div class="row mb-3">
-          <label for="colFormLabel" class="col-sm-2 col-form-label">Издательство</label>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Заглавие</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" value="Изд-во Орел ГАУ" readonly>
+            <input type="text" class="form-control" value="Теория механизммов и машин. Курсовое проектирование." readonly>
+          </div>
+        </div>
+
+      <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Выходные данные</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="Екатеринбург : Изд-во Урал. ун-та, 2014" readonly>
           </div>
       </div>
 
-    </main>
-  </div>
-</div>
+      <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Физическое описание</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="89, [2] с. табл. 20 см" readonly>
+          </div>
+      </div>
 
+      <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">ISBN</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="978-5-7996-1198-9 : 100.00" readonly>
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Тема</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="Языки для программирования -- Руководства и пособия" readonly>
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Ключевые слова</label>
+          <div class="col-sm-9">
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" readonly>"УЧЕБНЫЕ ПОСОБИЯ, ВЫСШАЯ ШКОЛА, PYTHON, ОСНОВНЫЕ ПОНЯТИЯ, ПРИЕМЫ ПРОГРАММИРОВАНИЯ" </textarea>
+          </div>
+      </div>
+
+      <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">Шифр</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" value="5ВГ66, Б-905" readonly>
+          </div>
+      </div>
+
+  </div>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
-  gtag('js', new Date());
-
-  gtag('config', 'UA-179173139-1');
-</script>
 </body>
 </html>
