@@ -12,9 +12,9 @@ class Class_Sql:
             self.cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=172.16.157.1;DATABASE=rb_mar;UID=sa;PWD=sql_admin')
 
 
-    def getIdBook(self, tag, val_tag, prec = True):
+    def getIdBook(self, tag, val_tag, prec = False):
         """
-        Список DOC_ID найденных книг
+        Поиск книги по словарю
         :param tag: Тэг поля книги (100а, 245a, ...)
         :param val_tag: Значение поля
         :param prec: Точное совпадение (True / False)
@@ -30,11 +30,28 @@ class Class_Sql:
         ls = [col[0] for col in row]
         return ls
 
+    def getValTeg(self, tag, book_id):
+        """
+        Возвращает значение тэка указанной книги
+        :param teg: Тэг поля
+        :param book_id: Id книги
+        :return: Значение тэга
+        """
+        cursor = self.cnxn.cursor()
+        sql = f"SELECT IDX{tag}.TERM FROM IDX{tag}X, IDX{tag} where IDX{tag}X.DOC_ID = {book_id} and IDX{tag}X.IDX_ID = IDX{tag}.IDX_ID"
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        ls = [col[0] for col in row]
+        return ls[0]
+
+
     def listBook(self, ls_id):
         """
+        !!! Пока не используем
         Сисок книг по списку их id
         :param ls_id:
         :return: <class: list>
+        !!! Должно взвращать опискние книги для его парсинга
         """
         cursor = self.cnxn.cursor()
         # sql = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
@@ -47,30 +64,60 @@ class Class_Sql:
         ls_book = [col[0] for col in row]
         return ls_book
 
-    def getRnd(self, tag):
+    def getOneBook(self, book_id):
         """
-        Выбор рандомной записи из словаря
-        :param tag: Тэг (100a or 245a or ... )
-        :return: Рандомная запись
         """
         cursor = self.cnxn.cursor()
-        sql = f'SELECT min(IDX_ID) as min_row, max(IDX_ID) as max_row FROM IDX{tag}'
+        sql = f"SELECT ITEM FROM DOC where DOC_ID in ({book_id})"
         cursor.execute(sql)
         row = cursor.fetchall()
-        min_id, max_id = row[0][0], row[0][1]
-        random.seed(random.randint(1,100))
-        # random.seed(1)
-        rnd_id = random.randint(min_id, max_id)
-        sql = f"SELECT TERM FROM IDX{tag} where IDX_ID = {rnd_id}"
-        cursor.execute(sql)
-        row = cursor.fetchall()
-        return row[0][0]
+        txt_book = [col[0] for col in row][0]
+        return txt_book
+
+    # def getRnd(self, tag):
+    #     """
+    #     Выбор рандомной записи из словаря
+    #     :param tag: Тэг (100a or 245a or ... )
+    #     :return: Рандомная запись
+    #     """
+    #     cursor = self.cnxn.cursor()
+    #     sql = f'SELECT min(IDX_ID) as min_row, max(IDX_ID) as max_row FROM IDX{tag}'
+    #     cursor.execute(sql)
+    #     row = cursor.fetchall()
+    #     min_id, max_id = row[0][0], row[0][1]
+    #     random.seed(random.randint(1,100))
+    #     # random.seed(1)
+    #     rnd_id = random.randint(min_id, max_id)
+    #     sql = f"SELECT TERM FROM IDX{tag} where IDX_ID = {rnd_id}"
+    #     cursor.execute(sql)
+    #     row = cursor.fetchall()
+    #     return row[0][0]
+
+    def getSpisBook(self, ls_id):
+        """
+        Возвращает список найденных книг
+        :param ls_id: Список ID книг
+        :return: список словарей (автор, заглавие, издательство, объём)
+        """
+
+        ls = []
+        # dc.update({'id': id, '100a': self.getValTeg('100a', id), '245a': self.getValTeg('245a', id), '260b': self.getValTeg('260b', id), '300a': self.getValTeg('300a', id) })
+        for id in ls_id:
+            dc = {}
+            dc.update({'id': id, '100a': self.getValTeg('100a', id), '245a': self.getValTeg('245a', id), '260b': self.getValTeg('260b', id), '300a': 'Значение тэга 300a' })
+            ls.append(dc)
+        return ls
 
 
 if __name__ == '__main__':
     from pprint import pprint
     marc = Class_Sql()
-    print(marc.getRnd('100a'))
-    print(marc.getRnd('100a'))
-    print(marc.getRnd('100a'))
+    # print(marc.getIdBook('245a', 'Кролики'))
+    # print(marc.listBook([173833, 277715, 170115, 113161, 39410]))
+    # print(marc.getValTeg('260b', 173833))
+    print(marc.getOneBook(173833))
+
+
+    # print(marc.getSpisBook([173833, 277715, 170115, 113161, 39410]))
+
 
