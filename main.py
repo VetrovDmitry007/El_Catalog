@@ -32,10 +32,10 @@ def authoriz():
 @app.route('/find', methods=['POST'])
 def find():
     if request.method == 'POST':
-        # return render_template('tab_result.html')
-        # print(type(request.form))
-        # ls_book = parsFind(request.form)
-        ls_book = crSpisBook(10)
+        ls_id = findBook(request.form)
+        print(ls_id)
+        marc = Class_Sql()
+        ls_book = marc.getSpisBook(ls_id)
         if ('psw' in session) and (session["psw"].strip() == '1'):
             return render_template('tabResult.html', ls_book = ls_book)
         else:

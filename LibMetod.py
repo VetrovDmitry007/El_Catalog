@@ -3,22 +3,9 @@
 """
 
 import re
-from pprint import pprint
 from flask import request
 from ApiSQL import *
 
-def parsFind(mdc):
-    """
-    Разбор данных пересланных формой поиска
-    :param mdc: => 'werkzeug.datastructures.ImmutableMultiDict'
-    :return: данные для поиска <class: list>
-    """
-    ls = []
-    if mdc['edit_1'] != '': ls.append((mdc['select_1'], mdc['edit_1']))
-    if mdc['edit_2'] != '': ls.append((mdc['select_2'], mdc['edit_2']))
-    if mdc['edit_3'] != '': ls.append((mdc['select_3'], mdc['edit_3']))
-    if mdc['edit_4'] != '': ls.append((mdc['select_4'], mdc['edit_4']))
-    return ls
 
 def crSpisBook(cn):
     """
@@ -37,6 +24,11 @@ def crSpisBook(cn):
     return ls
 
 def parsTeg(st):
+    """
+    Функция разбивает текст описани на тэги формата MARC
+    :param st: Текст описания
+    :return: Словарь вида {Тэг: Значение}
+    """
     st = st.replace(u'\x1e', u' ')
     st = st.replace(u'\x1f', u'')
     key = re.findall(r'\d{3,5}[ ]?[0-9]?[ ]?[a-z]', st)
@@ -50,6 +42,7 @@ def parsTeg(st):
         # Сократил тэг до 3-х симвадов
         key[i] = key[i][:-(len(key[i]) - 3)]
 
+    val = val[1::]
     ls = list(zip(key, val))
     dc = dict(ls)
     for i in dc.keys():
@@ -65,11 +58,32 @@ def parsTeg(st):
     return dc
 
 
+def findBook(mdc):
+    """
+    Поиск книг в форме поиска
+    :param mdc: => 'werkzeug.datastructures.ImmutableMultiDict'
+    :return: Список ID найденных книг
+    """
+    dc = {}
+    if mdc['edit_1'] != '': dc[mdc['select_1']] = mdc['edit_1']
+    if mdc['edit_2'] != '': dc[mdc['select_2']] = mdc['edit_2']
+    if mdc['edit_3'] != '': dc[mdc['select_3']] = mdc['edit_3']
+    if mdc['edit_4'] != '': dc[mdc['select_4']] = mdc['edit_4']
+
+    ls_id = []
+    marc = Class_Sql()
+    ls_id.extend([marc.getIdBook(key, val) for key, val in dc.items()])
+
+    return ls_id[0]
+
 
 
 if __name__ == '__main__':
-    # from pprint import pprint
+    from pprint import pprint
     # ls = crSpisBook(50)
     # pprint(ls)
-
-    pprint(parsTeg('001  0RU/IS/BASE/358335742005  020110510094431.4090  c636.92100  aКашкаров, А.245  aКролики "выбирают" свободу65014aКролиководство653  aСодержание кроликов бесклеточное773  tИнформационный бюллетеньd2011. - N 1gС. 47-48'))
+    marc = Class_Sql()
+    txt_book = marc.getOneBook(173833)
+    print(txt_book)
+    # print(parsTeg('001  0RU/IS/BASE/339260830005  020101001150710.302000c0-1004000eИшханова09000a636.8xЕ 47wЦФeб/нfЦФ-1б/н09400aП2001(ЦФ)09700a900bИшханова_Е10010aЕлагин Л.А.24500aКролик,его мясо,мех,пух и шерсть.26000aПетроградbГос.типографияc191930000a50с650 4aКролиководство65300aМясо кролика65300aПороды кроликов65300aПомещение для кроликов 65300aКормление кроликов65300aРазмножение кроликов65300aСодержание кроликов65300aУбой кроликов65300aБолезни кроликов; Ресурс электронный; Макрообъект900  aЕлагин Л. Н. Кролик99000z0j1'))
+    pprint(parsTeg(txt_book))
