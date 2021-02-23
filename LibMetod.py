@@ -7,22 +7,6 @@ from flask import request
 from ApiSQL import *
 
 
-def crSpisBook(cn):
-    """
-    !! Random НЕ работает
-    Создание тестового списка книг
-    :param cn: размер итогового списка
-    :return: список словарей (автор, заглавие, издательство, объём)
-    """
-    marc = Class_Sql()
-    ls = []
-    dc = {}
-    for _ in range(cn):
-        # dc.update({'100a': marc.getRnd('100a'), '245a': marc.getRnd('245a'), '260b': marc.getRnd('260b'), '300a': random.randint(100, 900), })
-        dc.update({'id': 526, '100a': marc.getRnd('100a'), '245a': marc.getRnd('245a'), '260b': 'Машиностроение', '300a': random.randint(100, 900), })
-        ls.append(dc)
-    return ls
-
 def parsTeg(st):
     """
     Функция разбивает текст описани на тэги формата MARC
@@ -42,7 +26,6 @@ def parsTeg(st):
         # Сократил тэг до 3-х симвадов
         key[i] = key[i][:-(len(key[i]) - 3)]
 
-    val = val[1::]
     ls = list(zip(key, val))
     dc = dict(ls)
     for i in dc.keys():
