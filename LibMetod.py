@@ -2,6 +2,7 @@
 Библиотека простых методов
 """
 
+import re
 from flask import request
 from ApiSQL import *
 
@@ -34,10 +35,39 @@ def crSpisBook(cn):
         ls.append(dc)
     return ls
 
+def parsTeg(st):
+    st = st.replace(u'\x1e', u' ')
+    st = st.replace(u'\x1f', u'')
+    key = re.findall(r'\d{3,5}[ ]?[0-9]?[ ]?[a-z]', st)
+    val = re.split(r'\d{3,5}[ ]?[0-9]?[ ]?[a-z]', st)
+    val3 = []
+
+    for i in range(len(key)):
+        val[i] = list(key[i])[-1] + val[i]
+        # key[i] = key[i][:-1]
+        # Сократил тэг до 3-х симвадов
+        key[i] = key[i][:-(len(key[i]) - 3)]
+
+    val = val[1::]
+    ls = list(zip(key, val))
+    dc = dict(ls)
+    for i in dc.keys():
+        key2 = re.findall(r'[a-z]', dc[i])
+        val2 = re.split(r'[a-z]', dc[i])
+        while '' in val2:
+            val2.remove('')
+        for st in val2:
+            val3.append(st.strip())
+        ls2 = list(zip(key2, val3))
+        dc[i] = dict(ls2)
+        val3 = []
+    return dc
+
 
 
 
 if __name__ == '__main__':
-    from pprint import pprint
-    ls = crSpisBook(50)
-    pprint(ls)
+    # from pprint import pprint
+    # ls = crSpisBook(50)
+    # pprint(ls)
+    print(parsTeg('001  0RU/IS/BASE/339260830005  020101001150710.302000c0-1004000eИшханова09000a636.8xЕ 47wЦФeб/нfЦФ-1б/н09400aП2001(ЦФ)09700a900bИшханова_Е10010aЕлагин Л.А.24500aКролик,его мясо,мех,пух и шерсть.26000aПетроградbГос.типографияc191930000a50с650 4aКролиководство65300aМясо кролика65300aПороды кроликов65300aПомещение для кроликов 65300aКормление кроликов65300aРазмножение кроликов65300aСодержание кроликов65300aУбой кроликов65300aБолезни кроликов; Ресурс электронный; Макрообъект900  aЕлагин Л. Н. Кролик99000z0j1'))
