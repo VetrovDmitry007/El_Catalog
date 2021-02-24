@@ -6,6 +6,7 @@ import re
 from flask import request
 from ApiSQL import *
 
+# coding = UTF-8
 
 def parsTeg(st):
     """
@@ -38,7 +39,12 @@ def parsTeg(st):
         ls2 = list(zip(key2, val3))
         dc[i] = dict(ls2)
         val3 = []
-    return dc
+    # Убираем вложенность словаря
+    dc_res = {}
+    for k1, v1 in dc.items():
+        for k2, v2 in v1.items():
+            dc_res[k1+k2] = v2
+    return dc_res
 
 
 def findBook(mdc):
@@ -47,26 +53,69 @@ def findBook(mdc):
     :param mdc: => 'werkzeug.datastructures.ImmutableMultiDict'
     :return: Список ID найденных книг
     """
-    dc = {}
-    if mdc['edit_1'] != '': dc[mdc['select_1']] = mdc['edit_1']
-    if mdc['edit_2'] != '': dc[mdc['select_2']] = mdc['edit_2']
-    if mdc['edit_3'] != '': dc[mdc['select_3']] = mdc['edit_3']
-    if mdc['edit_4'] != '': dc[mdc['select_4']] = mdc['edit_4']
-
-    ls_id = []
+    tag = []
     marc = Class_Sql()
-    ls_id.extend([marc.getIdBook(key, val) for key, val in dc.items()])
 
-    return ls_id[0]
+    set_full, set_id_2, set_id_3, set_id_4 = set(), set(), set(), set()
+
+    if mdc['edit_1'] != '':
+        tag = [mdc['select_1'], mdc['edit_1']]  # {'100a': 'Иванов'}
+        set_full = set(marc.getIdBook(tag[0], tag[1]))
+
+    if mdc['edit_2'] != '':
+        tag = [mdc['select_2'], mdc['edit_2']]
+        set_id_2 = set(marc.getIdBook(tag[0], tag[1]))
+        if mdc['select_2_0'] == 'ИЛИ':
+            set_full = set_full | set_id_2
+        else:
+            set_full = set_full & set_id_2
+
+    if mdc['edit_3'] != '':
+        tag = [mdc['select_3'], mdc['edit_3']]
+        set_id_3 = set(marc.getIdBook(tag[0], tag[1]))
+        if mdc['select_3_0'] == 'ИЛИ':
+            set_full = set_full | set_id_3
+        else:
+            set_full = set_full & set_id_3
+
+    if mdc['edit_4'] != '':
+        tag = [mdc['select_4'], mdc['edit_4']]
+        set_id_4 = set(marc.getIdBook(tag[0], tag[1]))
+        if mdc['select_4_0'] == 'ИЛИ':
+            set_full = set_full | set_id_4
+        else:
+            set_full = set_full & set_id_4
+
+    return set_full
 
 
+def getInfoBook(book_id):
+    marc = Class_Sql()
+    txt_book = marc.getOneBook(book_id)
+    dc_tag = parsTeg(txt_book)
+    ls_result = [
+                  ['Индекс УДК', dc_tag.get('080a', None)],
+                  ['Каталожный индекс', dc_tag.get('090c', None)],
+                  ['Автор', dc_tag.get('100a', None)],
+                  ['Другие авторы', dc_tag.get('700a', None)],
+                  ['Заглавие', dc_tag.get('245a', None)],
+                  ['Продолжение заглавия', dc_tag.get('245b', None)],
+                  ['Аннотация', dc_tag.get('520a', None)],
+                  ['Основная рубрика', dc_tag.get('650a', None)],
+                  ['Выходные данные', (dc_tag.get('260a', '_')+' '+dc_tag.get('260b', '')+' '+dc_tag.get('260c', '')) ],
+                  ['Источник информации', (dc_tag.get('773t', '_')+' '+dc_tag.get('773d', '')+' '+dc_tag.get('773g', '')) ],
+                  ['Ключевые слова', dc_tag.get('653a', None)],
+                  ['Объём', dc_tag.get('300a', None)],
+                  ['Макрообъект', dc_tag.get('900a', None)],
+                  ]
+
+    ls_result = [st for st in ls_result if st[1] != None]
+    ls_result = [st for st in ls_result if len(st[1]) > 3]
+    return ls_result
 
 if __name__ == '__main__':
     from pprint import pprint
-    # ls = crSpisBook(50)
-    # pprint(ls)
     marc = Class_Sql()
-    txt_book = marc.getOneBook(173833)
-    print(txt_book)
-    # print(parsTeg('001  0RU/IS/BASE/339260830005  020101001150710.302000c0-1004000eИшханова09000a636.8xЕ 47wЦФeб/нfЦФ-1б/н09400aП2001(ЦФ)09700a900bИшханова_Е10010aЕлагин Л.А.24500aКролик,его мясо,мех,пух и шерсть.26000aПетроградbГос.типографияc191930000a50с650 4aКролиководство65300aМясо кролика65300aПороды кроликов65300aПомещение для кроликов 65300aКормление кроликов65300aРазмножение кроликов65300aСодержание кроликов65300aУбой кроликов65300aБолезни кроликов; Ресурс электронный; Макрообъект900  aЕлагин Л. Н. Кролик99000z0j1'))
-    pprint(parsTeg(txt_book))
+    txt_book = marc.getOneBook(17822)
+    dc = parsTeg(txt_book)
+    pprint(dc)

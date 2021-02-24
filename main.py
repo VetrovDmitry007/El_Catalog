@@ -28,12 +28,11 @@ def authoriz():
         return render_template('authorize.html')
 
 
-
 @app.route('/find', methods=['POST'])
 def find():
     if request.method == 'POST':
         ls_id = findBook(request.form)
-        print(ls_id)
+        # print(ls_id)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
         if ('psw' in session) and (session["psw"].strip() == '1'):
@@ -42,15 +41,14 @@ def find():
             return render_template('authorize.html')
 
 
-
 @app.route('/book/<id>')
 def infoBook(id):
-    # return 'Book id: '+ str(id)
     if ('psw' in session) and (session["psw"].strip() == '1'):
-        return render_template('infoBook.html')
+        print('Book_Id: ', id)
+        ls_tag = getInfoBook(id)
+        return render_template('infoBook.html', ls_tag = ls_tag)
     else:
         return render_template('authorize.html')
-
 
 
 if __name__ == '__main__':
