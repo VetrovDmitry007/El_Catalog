@@ -45,7 +45,11 @@ def parsTeg(st):
         ls2 = list(zip(key2, val3))
         dc[i] = dict(ls2)
         val3 = []
-    return dc
+    dc_res = {}
+    for k1, v1 in dc.items():
+        for k2, v2 in v1.items():
+            dc_res[k1 + k2] = v2
+    return dc_res
 
 
 def findBook(mdc):
@@ -170,6 +174,6 @@ if __name__ == '__main__':
     # txt_book = marc.getOneBook(17822)
     # dc = parsTeg(txt_book)
     # pprint(dc)
-
+    print(parsTeg('001  0RU/IS/BASE/358335742005  020110510094431.4090  c636.92100  aКашкаров, А.245  aКролики "выбирают" свободу65014aКролиководство653  aСодержание кроликов бесклеточное773  tИнформационный бюллетеньd2011. - N 1gС. 47-48'))
     fd, path = uploadFile(333257)
     print(fd, path)
