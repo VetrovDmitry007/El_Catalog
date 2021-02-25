@@ -5,6 +5,10 @@
 import re
 from flask import request
 from ApiSQL import *
+import tempfile
+import os
+import time
+from threading import Thread
 
 # coding = UTF-8
 
@@ -113,9 +117,62 @@ def getInfoBook(book_id):
     ls_result = [st for st in ls_result if len(st[1]) > 3]
     return ls_result
 
-if __name__ == '__main__':
-    from pprint import pprint
+def uploadFile(book_id):
+    """
+    Создаем временный файл макрообъекта
+    :param book_id:
+    :return:
+    fd: Дескриптор файла
+    path: Полное имя файла
+    """
+    if book_id == None: return None
+    # Устанавливаем каталог программы
+    dir_prog = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(dir_prog)
     marc = Class_Sql()
-    txt_book = marc.getOneBook(17822)
-    dc = parsTeg(txt_book)
-    pprint(dc)
+    data, xtd = marc.loadFromSql(book_id)
+    if data == None: return None
+    # создаем временный файл
+    fd, path = tempfile.mkstemp(suffix='.'+xtd, text=True, dir='./upload')
+    # print('создаем временный файл:', path)
+    with open(path, 'wb') as f:
+        f.write(data)
+    return fd, path
+
+def delTemFile(fd, path):
+    """
+    Функция для запуска в потоке
+    Через промежуток времени tim удаляет вменный файл
+    :param fd: Дескриптор файла
+    :param path: Полное имя файла
+    :return:
+    """
+    print('Запуск удаления:', path)
+    tim = 20
+    time.sleep(tim)
+    # закрываем дескриптор файла
+    os.close(fd)
+    # уничтожаем файл
+    os.unlink(path)
+    print('Удален:', path)
+
+def StartThreadDel(fd, path):
+    """
+    Запуск потока обработки удаления временного файла
+    :param fd: Дескриптор файла
+    :param path: Полное имя файла
+    :return:
+    """
+    thread = Thread(target=delTemFile, args=(fd, path,))
+    thread.start()
+
+
+if __name__ == '__main__':
+    # from pprint import pprint
+    # marc = Class_Sql()
+    # txt_book = marc.getOneBook(17822)
+    # dc = parsTeg(txt_book)
+    # pprint(dc)
+
+    fd, path = uploadFile(333257)
+    print(fd, path)

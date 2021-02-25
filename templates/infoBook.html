@@ -86,7 +86,7 @@
           <label  class="col-sm-2 col-form-label">{{ tag[0] }}</label>
           <div class="col-sm-9">
             {% if tag[0] == 'Макрообъект' %}
-               <a href="./upload/test.pdf"><input type="text" class="form-control" value="{{ tag[1] }}" readonly></a>
+               <a href="/upload/{{ book_id }}"><input type="text" class="form-control" value="{{ tag[1] }}" readonly></a>
             {% elif tag[1] |length < 100 %}
               <input type="text" class="form-control" value="{{ tag[1] }}" readonly>
             {% else %}

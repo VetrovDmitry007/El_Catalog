@@ -1,7 +1,6 @@
 import os
 
 import pyodbc
-import random
 from sys import platform
 
 class Class_Sql:
@@ -29,7 +28,6 @@ class Class_Sql:
         sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}'"
         sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
         sql = sql_prec if prec else sql_approx
-        print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
@@ -51,27 +49,9 @@ class Class_Sql:
         return s
 
 
-    def listBook(self, ls_id):
-        """
-        !!! Пока не используем
-        Сисок книг по списку их id
-        :param ls_id:
-        :return: <class: list>
-        !!! Должно взвращать опискние книги для его парсинга
-        """
-        cursor = self.cnxn.cursor()
-        # sql = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
-        ls_id = list(map(str, ls_id))
-        str_id = ','.join(ls_id)
-        sql = f"SELECT ITEM FROM DOC where DOC_ID in ({str_id})"
-        cursor.execute(sql)
-        row = cursor.fetchall()
-        ls_book = [col[0] for col in row]
-        return ls_book
-
     def getOneBook(self, book_id):
         """
-        Возвращает библиографическое описание книги
+        Возвращает разобранное библиографическое описание книги
         :param book_id: ID книги
         :return: Библиографическое описание книги
         """
@@ -99,23 +79,28 @@ class Class_Sql:
         return ls
 
 
-    def loadFile(self, book_id):
-
+    def loadFromSql(self, book_id):
+        """
+        Извлекает файл из таблицы макрообъектов
+        :param book_id: ID Книги
+        :return: data, xtd
+        data: Бинарный файл
+        xtd: Расширение файла
+        """
         mcr_name = self.getValTeg('900a', book_id)
-        print(mcr_name)
         cursor = self.cnxn.cursor()
-        # sql = f"SELECT ITEM FROM MOBJECT where NAME = '{mcr_name}'"
-        sql = f"SELECT ITEM FROM MOBJECT where NAME = 'Финансы и кредит 12-2'"
+        sql = f"SELECT ITEM, TYP FROM MOBJECT where NAME = '{mcr_name}'"
         cursor.execute(sql)
         row = cursor.fetchall()
-        data = row[0][0]
-        # print(type(data))
-        with open('./upload/test.pdf', 'wb') as f:
-            f.write(data)
+        if len(row) == 0:
+            data = None
+            xtd = None
+            return (data, xtd)
+        else:
+            data = row[0][0]
+            xtd = row[0][1]
+            return (data, xtd)
 
-"""
-SELECT ITEM FROM MOBJECT where NAME =
-"""
 
 if __name__ == '__main__':
     from pprint import pprint

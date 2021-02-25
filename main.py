@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, session
-import os
+from flask import Flask, render_template, request, session, send_file
 from LibMetod import *
 
 app = Flask(__name__,  static_folder='static')
 app.debug = True
 app.config['SECRET_KEY'] = '38899ebc4e1575cc5199d9268611741bb7569903'
-# отключить кэш
+# отключить кэш CSS
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
@@ -32,7 +31,6 @@ def authoriz():
 def find():
     if request.method == 'POST':
         ls_id = findBook(request.form)
-        # print(ls_id)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
         if ('psw' in session) and (session["psw"].strip() == '1'):
@@ -44,11 +42,20 @@ def find():
 @app.route('/book/<id>')
 def infoBook(id):
     if ('psw' in session) and (session["psw"].strip() == '1'):
-        print('Book_Id: ', id)
         ls_tag = getInfoBook(id)
-        return render_template('infoBook.html', ls_tag = ls_tag)
+        return render_template('infoBook.html', ls_tag = ls_tag, book_id = id)
     else:
         return render_template('authorize.html')
+
+@app.route('/upload/<id>')
+def upload_file(id):
+    tpl = uploadFile(id)  # кортэж (fd, path)
+    if tpl:
+        fd, path = tpl
+        StartThreadDel(fd, path)
+        return send_file(path) # посмотреть справку по send_file()
+    else: # если файл (макрообъект) не найден
+        return render_template('find.html')
 
 
 if __name__ == '__main__':
