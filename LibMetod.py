@@ -19,36 +19,33 @@ def parsTeg(st):
     :return: Словарь вида {Тэг: Значение}
     """
     st = st.replace(u'\x1e', u' ')
-    st = st.replace(u'\x1f', u'')
-    key = re.findall(r'\d{3,5}[ ]?[0-9]?[ ]?[a-z]', st)
-    val = re.split(r'\d{3,5}[ ]?[0-9]?[ ]?[a-z]', st)
+    st = st.replace(u'\x1f', u'*+-')
+    key = re.findall(r'\d{3,5}[ ]?[0-9]?[ ]?[*][+][-][a-z]', st)
+    val = re.split(r'\d{3,5}[ ]?[0-9]?[ ]?[*][+][-][a-z]', st)
     val3 = []
 
     val = val[1::]
     for i in range(len(key)):
-        val[i] = list(key[i])[-1] + val[i]
-        # key[i] = key[i][:-1]
+        val[i] = ''.join(list(key[i])[-4:]) + val[i]
+        # key[i] = key[i][:-4]
         # Сократил тэг до 3-х симвадов
         key[i] = key[i][:-(len(key[i]) - 3)]
 
     ls = list(zip(key, val))
     dc = dict(ls)
     for i in dc.keys():
-        key2 = re.findall(r'[a-z]', dc[i])
-        val2 = re.split(r'[a-z]', dc[i])
+        key2 = re.findall(r'[*][+][-][a-z]', dc[i])
+        val2 = re.split(r'[*][+][-][a-z]', dc[i])
         while '' in val2:
             val2.remove('')
+        for j in range(len(key2)):
+            key2[j] = key2[j].replace('*+-', '')
         for st in val2:
             val3.append(st.strip())
         ls2 = list(zip(key2, val3))
         dc[i] = dict(ls2)
         val3 = []
-    # Убираем вложенность словаря
-    dc_res = {}
-    for k1, v1 in dc.items():
-        for k2, v2 in v1.items():
-            dc_res[k1+k2] = v2
-    return dc_res
+    return dc
 
 
 def findBook(mdc):
