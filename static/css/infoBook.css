@@ -1,6 +1,12 @@
 .form-control[readonly] {
-    background-color: #f2f8ff;
+    background-color: #fff9e1;
     opacity: 1;
+}
+
+.macro_obj
+{
+color: #0a66ec;
+cursor: pointer;
 }
 
 .sidebar .nav-link {
