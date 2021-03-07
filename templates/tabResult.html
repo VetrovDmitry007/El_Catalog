@@ -52,7 +52,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ url_for('getPdf', ls = ls_book) }}">
               <span data-feather="shopping-cart"></span>
               Экспорт
             </a>
@@ -102,7 +102,7 @@
               <td>{{ book['300a'] }}</td>
               <td class="text-center">{{ book['900a'] }}</td>
             </tr>
-            {%endfor%}
+            {% endfor %}
           </tbody>
         </table>
       </div>

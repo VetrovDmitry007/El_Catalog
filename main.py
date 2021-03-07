@@ -33,16 +33,23 @@ def find():
         ls_id = findBook(request.form)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
+        # print(ls_book)
         if ('psw' in session) and (session["psw"].strip() == '1'):
             return render_template('tabResult.html', ls_book = ls_book)
         else:
             return render_template('authorize.html')
 
 
+@app.route('/export/<ls>')
+def getPdf(ls):
+
+    return ls
+
 @app.route('/book/<id>')
 def infoBook(id):
     if ('psw' in session) and (session["psw"].strip() == '1'):
         ls_tag = getInfoBook(id)
+        print(ls_tag)
         return render_template('infoBook.html', ls_tag = ls_tag, book_id = id)
     else:
         return render_template('authorize.html')
