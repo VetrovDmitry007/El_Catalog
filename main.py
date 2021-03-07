@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, send_file
+from flask import Flask, render_template, session, send_file
 from LibMetod import *
 
 app = Flask(__name__,  static_folder='static')
@@ -47,14 +47,25 @@ def infoBook(id):
     else:
         return render_template('authorize.html')
 
-@app.route('/upload/<id>')
-def upload_file(id):
-    tpl = uploadFile(id)  # кортэж (fd, path)
+@app.route('/upload/<book_id>')
+def upload_file(book_id):
+    tpl = uploadFile(book_id)  # кортэж (fd, path)
     if tpl:
         fd, path = tpl
         StartThreadDel(fd, path)
         return send_file(path) # посмотреть справку по send_file()
-    else: # если файл (макрообъект) не найден
+    else:  # если файл макрообъекта не создан
+        return render_template('find.html')
+
+
+@app.route('/export_tmp/<ls_books>')
+def export_pdf(ls_books):
+    tpl = uploadPDF(ls_books)  # кортэж (fd, path)
+    if tpl:
+        fd, path = tpl
+        StartThreadDel(fd, path)
+        return send_file(path)
+    else:  # если файл не создан
         return render_template('find.html')
 
 
