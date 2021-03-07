@@ -122,9 +122,7 @@ def uploadFile(book_id):
     """
     Создаем временный файл макрообъекта
     :param book_id:
-    :return:
-    fd: Дескриптор файла
-    path: Полное имя файла
+    :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
     if book_id == None: return None
     # Устанавливаем каталог программы
@@ -138,7 +136,25 @@ def uploadFile(book_id):
     # print('создаем временный файл:', path)
     with open(path, 'wb') as f:
         f.write(data)
-    return fd, path
+    return (fd, path)
+
+def uploadPDF(ls_books):
+    """
+    Создаёт временный PDF файл (результат поиска)
+    :param ls_books:
+    :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
+    """
+    # Устанавливаем каталог программы
+    # dir_prog = os.path.dirname(os.path.abspath(__file__))
+    # os.chdir(dir_prog)
+    data = '' # бинарный файл
+    if data == None: return None
+    # создаем временный файл
+    fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
+    # print('создаем временный файл:', path)
+    with open(path, 'wb') as f:
+        f.write(data)
+    return (fd, path)
 
 def delTemFile(fd, path):
     """
