@@ -34,7 +34,7 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a href="/login" class="nav-link active" aria-current="page" href="#">
+            <a href="/login" class="nav-link active" aria-current="page">
               <span data-feather="home"></span>
               Поиск
             </a>
@@ -52,7 +52,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('getPdf', ls = ls_book) }}">
+            <a class="nav-link" href="{{ url_for('getPdf', ls_book = [{'a':1},{'b':2}] ) }}">
               <span data-feather="shopping-cart"></span>
               Экспорт
             </a>

@@ -1,7 +1,7 @@
 import fpdf
 
 
-def made_PDF(ls_book, name_pdf):
+def save_PDF(ls_book, name_pdf):
     """
 
     :param ls_book: Список книг
@@ -36,11 +36,11 @@ def made_PDF(ls_book, name_pdf):
     pdf.line(11, 20, 202, 20)
 
     # Для исправленея ошибки переполнения списка
-    if len(ls_book) > 47:
-        ls_book = ls_book[:47]
+    # if len(ls_book) > 47:
+    #     ls_book = ls_book[:47]
 
-    for i in ls_book:
-        for j in i.items():
+    for dc_teg in ls_book:
+        for j in dc_teg.items():
             if str(j[0]) == 'id':
                 num += 1
                 word_ls.append(str(num))
@@ -218,5 +218,5 @@ if __name__ == '__main__':
           {'id': 13356, '100a': 'Иванова Н.', '245a': 'Наука и инновации', '260b': 'Экономист', '300a': 'С.72-80',
            '900a': ''}, {'id': 291885, '100a': ' ', '245a': 'Наука и образование в России', '260b': 'Вузовский вестник',
                          '300a': 'С. 2', '900a': ''}]
-    a = made_PDF(dk, 'Temp.pdf')
+    a = save_PDF(dk, 'Temp.pdf')
     print(a)

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, send_file
 from LibMetod import *
 
+
 app = Flask(__name__,  static_folder='static')
 app.debug = True
 app.config['SECRET_KEY'] = '38899ebc4e1575cc5199d9268611741bb7569903'
@@ -35,15 +36,12 @@ def find():
         ls_book = marc.getSpisBook(ls_id)
         # print(ls_book)
         if ('psw' in session) and (session["psw"].strip() == '1'):
+            # tpl = uploadPDF(ls_book)
+            # print(tpl)
             return render_template('tabResult.html', ls_book = ls_book)
         else:
             return render_template('authorize.html')
 
-
-@app.route('/export/<ls>')
-def getPdf(ls):
-
-    return ls
 
 @app.route('/book/<id>')
 def infoBook(id):
@@ -65,15 +63,22 @@ def upload_file(book_id):
         return render_template('find.html')
 
 
-@app.route('/export_tmp/<ls_books>')
-def export_pdf(ls_books):
-    tpl = uploadPDF(ls_books)  # кортэж (fd, path)
-    if tpl:
-        fd, path = tpl
-        StartThreadDel(fd, path)
-        return send_file(path)
-    else:  # если файл не создан
-        return render_template('find.html')
+@app.route('/export/<ls_book>')
+def getPdf(ls_book):
+    # import json
+    import pprint
+
+    print(type(ls_book))
+    pprint.pprint(ls_book)
+    return '11'
+
+    # tpl = uploadPDF(ls_book)  # кортэж (fd, path)
+    # if tpl:
+    #     fd, path = tpl
+    #     StartThreadDel(fd, path)
+    #     return send_file(path)
+    # else:  # если файл не создан
+    #     return render_template('find.html')
 
 
 if __name__ == '__main__':

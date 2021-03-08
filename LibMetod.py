@@ -9,6 +9,7 @@ import tempfile
 import os
 import time
 from threading import Thread
+from from_pdf import save_PDF
 
 # coding = UTF-8
 
@@ -138,7 +139,7 @@ def uploadFile(book_id):
         f.write(data)
     return (fd, path)
 
-def uploadPDF(ls_books):
+def uploadPDF(ls_book):
     """
     Создаёт временный PDF файл (результат поиска)
     :param ls_books:
@@ -147,13 +148,14 @@ def uploadPDF(ls_books):
     # Устанавливаем каталог программы
     # dir_prog = os.path.dirname(os.path.abspath(__file__))
     # os.chdir(dir_prog)
-    data = '' # бинарный файл
-    if data == None: return None
+    # data = '' # бинарный файл
+    # if data == None: return None
     # создаем временный файл
     fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
     # print('создаем временный файл:', path)
-    with open(path, 'wb') as f:
-        f.write(data)
+    # with open(path, 'wb') as f:
+    #     f.write(data)
+    save_PDF(ls_book=ls_book, name_pdf=path)
     return (fd, path)
 
 def delTemFile(fd, path):
