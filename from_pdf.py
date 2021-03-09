@@ -1,4 +1,5 @@
 import fpdf
+import re
 
 
 def save_PDF(ls_book, name_pdf):
@@ -10,6 +11,7 @@ def save_PDF(ls_book, name_pdf):
     print(ls_book)
     ls = [7, 35, 70, 65, 15]
     ls_k = [7, 35, 70, 65, 15]
+    raz = ' '
     word_ls = []
     num = 0
     fr = 0
@@ -50,8 +52,8 @@ def save_PDF(ls_book, name_pdf):
                 while len(st) > 30:
                     fr += 1
                     st1 = st[:30]
-                    st = st.split()
-                    st1 = st1.split()
+                    st = re.split(r'\W', st)
+                    st1 = re.split(r'\W', st1)
                     del st1[-1]
                     for x in range(len(st1)):
                         del st[0]
@@ -71,6 +73,7 @@ def save_PDF(ls_book, name_pdf):
                     word_ls[-1].append(st)
                 fr = 0
                 fl = 0
+
     for i in range(len(word_ls) + 1):
         cn += 1
         if cn == 5:
