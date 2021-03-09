@@ -36,8 +36,8 @@ def find():
         ls_book = marc.getSpisBook(ls_id)
         # print(ls_book)
         if ('psw' in session) and (session["psw"].strip() == '1'):
-            # tpl = uploadPDF(ls_book)
-            # print(tpl)
+            tpl = uploadPDF(ls_book)
+            print(tpl)
             return render_template('tabResult.html', ls_book = ls_book)
         else:
             return render_template('authorize.html')

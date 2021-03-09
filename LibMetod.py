@@ -146,16 +146,14 @@ def uploadPDF(ls_book):
     :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
     # Устанавливаем каталог программы
-    # dir_prog = os.path.dirname(os.path.abspath(__file__))
-    # os.chdir(dir_prog)
-    # data = '' # бинарный файл
-    # if data == None: return None
+    dir_prog = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(dir_prog)
     # создаем временный файл
-    fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
+    # fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
     # print('создаем временный файл:', path)
     # with open(path, 'wb') as f:
     #     f.write(data)
-    save_PDF(ls_book=ls_book, name_pdf=path)
+    save_PDF(ls_book=ls_book, name_pdf='temp.pdf')
     return (fd, path)
 
 def delTemFile(fd, path):
