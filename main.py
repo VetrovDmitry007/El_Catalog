@@ -9,17 +9,20 @@ app.config['SECRET_KEY'] = ec_cfg.SECRET_KEY
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
+@app.route('/MarcWeb/')
 @app.route('/')
 def index():
     return render_template('authorize.html')
 
 
+@app.route('/MarcWeb/exit')
 @app.route('/exit')
 def session_exit():
     session.pop('psw')
     return render_template('authorize.html')
 
 
+@app.route('/MarcWeb/login', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def authoriz():
     """
@@ -36,6 +39,7 @@ def authoriz():
         return render_template('authorize.html')
 
 
+@app.route('/MarcWeb/find', methods=['POST'])
 @app.route('/find', methods=['POST'])
 def find():
     """
@@ -55,6 +59,7 @@ def find():
             return render_template('authorize.html')
 
 
+@app.route('/MarcWeb/book/<id>')
 @app.route('/book/<id>')
 def infoBook(id):
     """
@@ -70,6 +75,7 @@ def infoBook(id):
         return render_template('authorize.html')
 
 
+@app.route('/MarcWeb/upload/<book_id>')
 @app.route('/upload/<book_id>')
 def upload_file(book_id):
     """
@@ -86,6 +92,7 @@ def upload_file(book_id):
         return render_template('find.html')
 
 
+@app.route('/MarcWeb/export/<patch_pdf>')
 @app.route('/export/<patch_pdf>')
 def getPdf(patch_pdf):
     """
