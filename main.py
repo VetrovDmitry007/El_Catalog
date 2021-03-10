@@ -9,7 +9,7 @@ app.config['SECRET_KEY'] = ec_cfg.SECRET_KEY
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
-@app.route('/MarcWeb/')
+@app.route('/MarcWeb/Work.asp')
 @app.route('/')
 def index():
     return render_template('authorize.html')
