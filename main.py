@@ -1,10 +1,11 @@
 from flask import Flask, render_template, session, send_file
 from LibMetod import *
+import ec_cfg
 
 
 app = Flask(__name__,  static_folder='static')
-app.debug = True
-app.config['SECRET_KEY'] = '38899ebc4e1575cc5199d9268611741bb7569903'
+app.debug = ec_cfg.debugFlask
+app.config['SECRET_KEY'] = ec_cfg.SECRET_KEY
 # отключить кэш CSS
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
@@ -18,11 +19,17 @@ def session_exit():
     session.pop('psw')
     return render_template('authorize.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def authoriz():
+    """
+    Форма авторизации ползователя
+    :return: Форма поиска
+    """
     if request.method == 'POST':
         session['psw'] = request.form['password']
-    if ('psw' in session) and (session["psw"].strip() == '1'):
+        session['login'] = request.form['login']
+    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (session["login"].strip() == ec_cfg.loginMarc):
         return render_template('find.html')
     else:
         return render_template('authorize.html')
@@ -30,30 +37,43 @@ def authoriz():
 
 @app.route('/find', methods=['POST'])
 def find():
+    """
+    Возвращает список найденной литературы
+    :return: Список словарей
+    """
     if request.method == 'POST':
         ls_id = findBook(request.form)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
-        # print(ls_book)
-        if ('psw' in session) and (session["psw"].strip() == '1'):
-            tpl = uploadPDF(ls_book)
-            print(tpl)
-            return render_template('tabResult.html', ls_book = ls_book)
+        if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (session["login"].strip() == ec_cfg.loginMarc):
+            fd, path = uploadPDF(ls_book)
+            StartThreadDel(fd, path)
+            return render_template('tabResult.html', ls_book = ls_book, patch_pdf = path)
         else:
             return render_template('authorize.html')
 
 
 @app.route('/book/<id>')
 def infoBook(id):
-    if ('psw' in session) and (session["psw"].strip() == '1'):
+    """
+    Возвращает библиографическое описание книги
+    :param id: ID книги
+    :return: Форма библиографическое описание книги
+    """
+    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (session["login"].strip() == ec_cfg.loginMarc):
         ls_tag = getInfoBook(id)
-        print(ls_tag)
         return render_template('infoBook.html', ls_tag = ls_tag, book_id = id)
     else:
         return render_template('authorize.html')
 
+
 @app.route('/upload/<book_id>')
 def upload_file(book_id):
+    """
+    Выгрузка пользователю макрообъекта
+    :param book_id: ID книги
+    :return: Файл макрообъекта
+    """
     tpl = uploadFile(book_id)  # кортэж (fd, path)
     if tpl:
         fd, path = tpl
@@ -63,23 +83,16 @@ def upload_file(book_id):
         return render_template('find.html')
 
 
-@app.route('/export/<ls_book>')
-def getPdf(ls_book):
-    # import json
-    import pprint
+@app.route('/export/<patch_pdf>')
+def getPdf(patch_pdf):
+    """
+    Выгрузка пользователю результата поиска в виде PDF файла
+    :param patch_pdf: Путь к временному PDF файлу
+    :return: PDF файл
+    """
+    return send_file(patch_pdf)
 
-    print(type(ls_book))
-    pprint.pprint(ls_book)
-    return '11'
-
-    # tpl = uploadPDF(ls_book)  # кортэж (fd, path)
-    # if tpl:
-    #     fd, path = tpl
-    #     StartThreadDel(fd, path)
-    #     return send_file(path)
-    # else:  # если файл не создан
-    #     return render_template('find.html')
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=ec_cfg.host, port=ec_cfg.port)

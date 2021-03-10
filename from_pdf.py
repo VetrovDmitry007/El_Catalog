@@ -8,7 +8,7 @@ def save_PDF(ls_book, name_pdf):
     :param ls_book: Список книг
     :return:
     """
-    print(ls_book)
+    # print(ls_book)
     ls = [7, 35, 70, 65, 15]
     ls_k = [7, 35, 70, 65, 15]
     raz = ' '

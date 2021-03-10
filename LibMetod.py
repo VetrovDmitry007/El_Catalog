@@ -149,11 +149,8 @@ def uploadPDF(ls_book):
     dir_prog = os.path.dirname(os.path.abspath(__file__))
     os.chdir(dir_prog)
     # создаем временный файл
-    # fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
-    # print('создаем временный файл:', path)
-    # with open(path, 'wb') as f:
-    #     f.write(data)
-    save_PDF(ls_book=ls_book, name_pdf='temp.pdf')
+    fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
+    save_PDF(ls_book=ls_book, name_pdf=path)
     return (fd, path)
 
 def delTemFile(fd, path):
@@ -165,7 +162,7 @@ def delTemFile(fd, path):
     :return:
     """
     print('Запуск удаления:', path)
-    tim = 20
+    tim = 30
     time.sleep(tim)
     # закрываем дескриптор файла
     os.close(fd)

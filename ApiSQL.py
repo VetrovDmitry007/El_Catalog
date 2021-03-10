@@ -1,5 +1,5 @@
 import os
-
+import ec_cfg
 import pyodbc
 from sys import platform
 
@@ -10,9 +10,9 @@ class Class_Sql:
         os.chdir(dir_prog)
         if platform == 'linux':
             self.cnxn = pyodbc.connect(
-                'DRIVER=FreeTDS; SERVER=172.16.157.1; PORT=1433; DATABASE=rb_mar; UID=sa; PWD=sql_admin; TDS_Version=8.0;')
+                ec_cfg.linux_conn)
         else:
-            self.cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=172.16.157.1;DATABASE=rb_mar;UID=sa;PWD=sql_admin')
+            self.cnxn = pyodbc.connect(ec_cfg.win_conn)
 
 
     def getIdBook(self, tag, val_tag, prec = False):
