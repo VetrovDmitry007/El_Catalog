@@ -24,7 +24,7 @@ def save_PDF(ls_book, name_pdf):
 
     pdf = fpdf.FPDF(format='legal')  # pdf format
     pdf.add_page()
-    pdf.add_font('DejaVu_Bold', '', 'DejaVuSans-Bold.ttf', uni=True)
+    pdf.add_font('DejaVu_Bold', '', './Font/DejaVuSans-Bold.ttf', uni=True)
     pdf.set_font('DejaVu_Bold', '', 10)
     pdf.cell(7, 10, txt='#')
     pdf.cell(35, 10, txt='Автор')
@@ -32,7 +32,7 @@ def save_PDF(ls_book, name_pdf):
     pdf.cell(65, 10, txt='Издательство')
     pdf.cell(15, 10, txt='Объём', ln=1)
     pdf.cell(50, 7, txt='', ln=1)
-    pdf.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)
+    pdf.add_font('DejaVu', '', './Font/DejaVuSansCondensed.ttf', uni=True)
     pdf.set_font('DejaVu', '', 10)
     pdf.set_line_width(0.5)
     pdf.set_draw_color(0, 0, 0)

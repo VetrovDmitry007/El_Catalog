@@ -1,7 +1,8 @@
 import os
-import ec_cfg
+from App import ec_cfg
 import pyodbc
 from sys import platform
+
 
 class Class_Sql:
 
@@ -14,8 +15,7 @@ class Class_Sql:
         else:
             self.cnxn = pyodbc.connect(ec_cfg.win_conn)
 
-
-    def getIdBook(self, tag, val_tag, prec = False):
+    def getIdBook(self, tag, val_tag, prec=False):
         """
         Поиск книги по словарю
         :param tag: Тэг поля книги (100а, 245a, ...)
@@ -25,7 +25,7 @@ class Class_Sql:
         """
         "FROM IDX100a where TERM like '%Аббасов%' and TERM like '%Т.%' and TERM like '%Г.%'"
         cursor = self.cnxn.cursor()
-        sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}'"
+        sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}' "
         sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
         sql = sql_prec if prec else sql_approx
         cursor.execute(sql)
@@ -45,9 +45,8 @@ class Class_Sql:
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
-        s = ls[0].replace('<null>','')
+        s = ls[0].replace('<null>', '')
         return s
-
 
     def getOneBook(self, book_id):
         """
@@ -71,13 +70,15 @@ class Class_Sql:
         ls = []
         for id in ls_id:
             dc = {}
-            src = self.getValTeg('260b', id) if bool(self.getValTeg('260b', id).strip()) else self.getValTeg('773t', id) # Издательство / Источник
-            v_book = self.getValTeg('300a', id) if bool(self.getValTeg('300a', id).strip()) else self.getValTeg('773g', id) # Объём
+            src = self.getValTeg('260b', id) if bool(self.getValTeg('260b', id).strip()) else self.getValTeg('773t',
+                                                                                                             id)  # Издательство / Источник
+            v_book = self.getValTeg('300a', id) if bool(self.getValTeg('300a', id).strip()) else self.getValTeg('773g',
+                                                                                                                id)  # Объём
             macro = 'Есть' if len(self.getValTeg('900a', id)) > 1 else ""
-            dc.update({'id': id, '100a': self.getValTeg('100a', id), '245a': self.getValTeg('245a', id), '260b': src, '300a': v_book,'900a': macro})
+            dc.update({'id': id, '100a': self.getValTeg('100a', id), '245a': self.getValTeg('245a', id), '260b': src,
+                       '300a': v_book, '900a': macro})
             ls.append(dc)
         return ls
-
 
     def loadFromSql(self, book_id):
         """
@@ -95,23 +96,17 @@ class Class_Sql:
         if len(row) == 0:
             data = None
             xtd = None
-            return (data, xtd)
+            return data, xtd
         else:
             data = row[0][0]
             xtd = row[0][1]
-            return (data, xtd)
+            return data, xtd
 
 
 if __name__ == '__main__':
-    from pprint import pprint
     marc = Class_Sql()
     # print(marc.getIdBook('245a', 'Кролики'))
     # print(marc.listBook([173833, 277715, 170115, 113161, 39410]))
     # print(marc.getValTeg('260b', 173833))
     # print(marc.getOneBook(173833))
-
-    marc.loadFile(333257)
-
-
-
-
+    # marc.loadFile(333257)

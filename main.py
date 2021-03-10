@@ -1,9 +1,8 @@
-from flask import Flask, render_template, session, send_file
-from LibMetod import *
-import ec_cfg
+from flask import Flask, render_template, session, send_file, request
+from App.LibMetod import *
+from App import ec_cfg
 
-
-app = Flask(__name__,  static_folder='static')
+app = Flask(__name__, static_folder='static')
 app.debug = ec_cfg.debugFlask
 app.config['SECRET_KEY'] = ec_cfg.SECRET_KEY
 # отключить кэш CSS
@@ -13,6 +12,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 @app.route('/')
 def index():
     return render_template('authorize.html')
+
 
 @app.route('/exit')
 def session_exit():
@@ -29,7 +29,8 @@ def authoriz():
     if request.method == 'POST':
         session['psw'] = request.form['password']
         session['login'] = request.form['login']
-    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (session["login"].strip() == ec_cfg.loginMarc):
+    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
+            session["login"].strip() == ec_cfg.loginMarc):
         return render_template('find.html')
     else:
         return render_template('authorize.html')
@@ -45,10 +46,11 @@ def find():
         ls_id = findBook(request.form)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
-        if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (session["login"].strip() == ec_cfg.loginMarc):
+        if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
+                session["login"].strip() == ec_cfg.loginMarc):
             fd, path = uploadPDF(ls_book)
             StartThreadDel(fd, path)
-            return render_template('tabResult.html', ls_book = ls_book, patch_pdf = path)
+            return render_template('tabResult.html', ls_book=ls_book, patch_pdf=path)
         else:
             return render_template('authorize.html')
 
@@ -60,9 +62,10 @@ def infoBook(id):
     :param id: ID книги
     :return: Форма библиографическое описание книги
     """
-    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (session["login"].strip() == ec_cfg.loginMarc):
+    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
+            session["login"].strip() == ec_cfg.loginMarc):
         ls_tag = getInfoBook(id)
-        return render_template('infoBook.html', ls_tag = ls_tag, book_id = id)
+        return render_template('infoBook.html', ls_tag=ls_tag, book_id=id)
     else:
         return render_template('authorize.html')
 
@@ -78,7 +81,7 @@ def upload_file(book_id):
     if tpl:
         fd, path = tpl
         StartThreadDel(fd, path)
-        return send_file(path) # посмотреть справку по send_file()
+        return send_file(path)  # посмотреть справку по send_file()
     else:  # если файл макрообъекта не создан
         return render_template('find.html')
 
@@ -91,7 +94,6 @@ def getPdf(patch_pdf):
     :return: PDF файл
     """
     return send_file(patch_pdf)
-
 
 
 if __name__ == '__main__':

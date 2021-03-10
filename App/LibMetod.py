@@ -3,13 +3,13 @@
 """
 
 import re
-from flask import request
-from ApiSQL import *
+from App.ApiSQL import *
 import tempfile
 import os
 import time
 from threading import Thread
-from from_pdf import save_PDF
+from App.from_pdf import save_PDF
+
 
 # coding = UTF-8
 
@@ -59,7 +59,6 @@ def findBook(mdc):
     :param mdc: => 'werkzeug.datastructures.ImmutableMultiDict'
     :return: Список ID найденных книг
     """
-    tag = []
     marc = Class_Sql()
 
     set_full, set_id_2, set_id_3, set_id_4 = set(), set(), set(), set()
@@ -100,58 +99,64 @@ def getInfoBook(book_id):
     txt_book = marc.getOneBook(book_id)
     dc_tag = parsTeg(txt_book)
     ls_result = [
-                  ['Индекс УДК', dc_tag.get('080a', None)],
-                  ['Каталожный индекс', dc_tag.get('090c', None)],
-                  ['Автор', dc_tag.get('100a', None)],
-                  ['Другие авторы', dc_tag.get('700a', None)],
-                  ['Заглавие', dc_tag.get('245a', None)],
-                  ['Продолжение заглавия', dc_tag.get('245b', None)],
-                  ['Аннотация', dc_tag.get('520a', None)],
-                  ['Основная рубрика', dc_tag.get('650a', None)],
-                  ['Выходные данные', (dc_tag.get('260a', '_')+' '+dc_tag.get('260b', '')+' '+dc_tag.get('260c', '')) ],
-                  ['Источник информации', (dc_tag.get('773t', '_')+' '+dc_tag.get('773d', '')+' '+dc_tag.get('773g', '')) ],
-                  ['Ключевые слова', dc_tag.get('653a', None)],
-                  ['Объём', dc_tag.get('300a', None)],
-                  ['Макрообъект', dc_tag.get('900a', None)],
-                  ]
+        ['Индекс УДК', dc_tag.get('080a', None)],
+        ['Каталожный индекс', dc_tag.get('090c', None)],
+        ['Автор', dc_tag.get('100a', None)],
+        ['Другие авторы', dc_tag.get('700a', None)],
+        ['Заглавие', dc_tag.get('245a', None)],
+        ['Продолжение заглавия', dc_tag.get('245b', None)],
+        ['Аннотация', dc_tag.get('520a', None)],
+        ['Основная рубрика', dc_tag.get('650a', None)],
+        ['Выходные данные', (dc_tag.get('260a', '_') + ' ' + dc_tag.get('260b', '') + ' ' + dc_tag.get('260c', ''))],
+        ['Источник информации',
+         (dc_tag.get('773t', '_') + ' ' + dc_tag.get('773d', '') + ' ' + dc_tag.get('773g', ''))],
+        ['Ключевые слова', dc_tag.get('653a', None)],
+        ['Объём', dc_tag.get('300a', None)],
+        ['Макрообъект', dc_tag.get('900a', None)],
+    ]
 
-    ls_result = [st for st in ls_result if st[1] != None]
+    ls_result = [st for st in ls_result if st[1] is not None]
     ls_result = [st for st in ls_result if len(st[1]) > 3]
     return ls_result
+
 
 def uploadFile(book_id):
     """
     Создаем временный файл макрообъекта
-    :param book_id:
+    :param book_id: ID книги
     :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
-    if book_id == None: return None
+    if book_id is None:
+        return None
     # Устанавливаем каталог программы
     dir_prog = os.path.dirname(os.path.abspath(__file__))
     os.chdir(dir_prog)
     marc = Class_Sql()
     data, xtd = marc.loadFromSql(book_id)
-    if data == None: return None
+    if data is None:
+        return None
     # создаем временный файл
-    fd, path = tempfile.mkstemp(suffix='.'+xtd, text=True, dir='./upload')
+    fd, path = tempfile.mkstemp(suffix='.' + xtd, text=True, dir='upload')
     # print('создаем временный файл:', path)
     with open(path, 'wb') as f:
         f.write(data)
-    return (fd, path)
+    return fd, path
+
 
 def uploadPDF(ls_book):
     """
     Создаёт временный PDF файл (результат поиска)
-    :param ls_books:
+    :param ls_book: Список книг
     :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
     # Устанавливаем каталог программы
     dir_prog = os.path.dirname(os.path.abspath(__file__))
     os.chdir(dir_prog)
     # создаем временный файл
-    fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='./upload')
+    fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='upload')
     save_PDF(ls_book=ls_book, name_pdf=path)
-    return (fd, path)
+    return fd, path
+
 
 def delTemFile(fd, path):
     """
@@ -170,6 +175,7 @@ def delTemFile(fd, path):
     os.unlink(path)
     print('Удален:', path)
 
+
 def StartThreadDel(fd, path):
     """
     Запуск потока обработки удаления временного файла
@@ -183,10 +189,7 @@ def StartThreadDel(fd, path):
 
 if __name__ == '__main__':
     # from pprint import pprint
-    # marc = Class_Sql()
-    # txt_book = marc.getOneBook(17822)
+    marc = Class_Sql()
+    txt_book = marc.getOneBook(17822)
     # dc = parsTeg(txt_book)
     # pprint(dc)
-    print(parsTeg('001  0RU/IS/BASE/358335742005  020110510094431.4090  c636.92100  aКашкаров, А.245  aКролики "выбирают" свободу65014aКролиководство653  aСодержание кроликов бесклеточное773  tИнформационный бюллетеньd2011. - N 1gС. 47-48'))
-    fd, path = uploadFile(333257)
-    print(fd, path)
