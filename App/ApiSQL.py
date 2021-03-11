@@ -50,6 +50,8 @@ class Class_Sql:
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
+        if not bool(ls):
+            ls = ['<null>']
         s = ls[0].replace('<null>', '')
         return s
 
