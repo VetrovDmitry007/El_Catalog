@@ -49,7 +49,9 @@ class Class_Sql:
             print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
+        print('row: ',row)
         ls = [col[0] for col in row]
+        print('ls: ', ls)
         s = ls[0].replace('<null>', '')
         return s
 
