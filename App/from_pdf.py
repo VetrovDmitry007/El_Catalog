@@ -11,8 +11,8 @@ def save_PDF(ls_book, name_pdf):
     # print(ls_book)
     ls = [7, 35, 70, 65, 15]
     ls_k = [7, 35, 70, 65, 15]
-    raz = ' '
     word_ls = []
+    word_ls_v = ['', '', '', '', '']
     num = 0
     fr = 0
     cn = -1
@@ -38,6 +38,31 @@ def save_PDF(ls_book, name_pdf):
     pdf.set_draw_color(0, 0, 0)
     pdf.line(11, 20, 202, 20)
 
+    def umn_rasp(el, key, ls, poz=''):
+        if poz == '':
+            if key == 'id':
+                ls[0] = el
+            elif key == '100a':
+                ls[1] = el
+            elif key == '245a':
+                ls[2] = el
+            elif key == '260b':
+                ls[3] = el
+            elif key == '300a':
+                ls[4] = el
+        else:
+            if key == 'id':
+                ls[0].append(el)
+            elif key == '100a':
+                ls[1].append(el)
+            elif key == '245a':
+                ls[2].append(el)
+            elif key == '260b':
+                ls[3].append(el)
+            elif key == '300a':
+                ls[4].append(el)
+        return ls
+
     # # Для исправленея ошибки переполнения списка
     # if len(ls_book) > 47:
     #     ls_book = ls_book[:47]
@@ -46,7 +71,7 @@ def save_PDF(ls_book, name_pdf):
         for j in dc_teg.items():
             if str(j[0]) == 'id':
                 num += 1
-                word_ls.append(str(num))
+                word_ls_v = umn_rasp(str(num), j[0], word_ls_v)
             if str(j[0]) != 'id' and str(j[0]) != '900a':
                 st = j[1]
                 while len(st) > 30:
@@ -60,19 +85,20 @@ def save_PDF(ls_book, name_pdf):
                     st1 = ' '.join(st1)
                     st = ' '.join(st)
                     if fr == 1:
-                        word_ls.append([st1])
+                        word_ls_v = umn_rasp([st1], j[0], word_ls_v)
                     else:
-                        word_ls[-1].append(st1)
+                        word_ls_v = umn_rasp(st, j[0], word_ls_v, poz='-')
                     fl = 1
 
                 if j[0] == '100a' and len(st) >= 17:
-                    word_ls.append(st.split(','))
+                    word_ls_v = umn_rasp(st.split(','), j[0], word_ls_v)
                 elif fl != 1:
-                    word_ls.append(st)
+                    word_ls_v = umn_rasp(st, j[0], word_ls_v)
                 else:
-                    word_ls[-1].append(st)
+                    word_ls_v = umn_rasp(st, j[0], word_ls_v, poz='-')
                 fr = 0
                 fl = 0
+        word_ls += word_ls_v.copy()
 
     for i in range(len(word_ls) + 1):
         cn += 1
