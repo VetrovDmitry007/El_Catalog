@@ -28,6 +28,7 @@ class Class_Sql:
         sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
         sql = sql_prec if prec else sql_approx
         if ec_cfg.debugSQL:
+            print('getIdBook()')
             print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
@@ -36,13 +37,16 @@ class Class_Sql:
 
     def getValTeg(self, tag, book_id):
         """
-        Возвращает значение тэка указанной книги
+        Возвращает значение тэга указанной книги
         :param teg: Тэг поля
         :param book_id: Id книги
         :return: Значение тэга
         """
         cursor = self.cnxn.cursor()
         sql = f"SELECT IDX{tag}.TERM FROM IDX{tag}X, IDX{tag} where IDX{tag}X.DOC_ID = {book_id} and IDX{tag}X.IDX_ID = IDX{tag}.IDX_ID"
+        if ec_cfg.debugSQL:
+            print('getValTeg()')
+            print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
