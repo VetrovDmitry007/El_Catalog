@@ -23,11 +23,12 @@ class Class_Sql:
         :param prec: Точное совпадение (True / False)
         :return: Список DOC_ID
         """
-        "FROM IDX100a where TERM like '%Аббасов%' and TERM like '%Т.%' and TERM like '%Г.%'"
         cursor = self.cnxn.cursor()
         sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}' "
         sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
         sql = sql_prec if prec else sql_approx
+        if ec_cfg.debugSQL:
+            print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]

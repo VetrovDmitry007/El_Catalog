@@ -19,6 +19,7 @@ def index():
 @app.route('/exit')
 def session_exit():
     session.pop('psw')
+    session.pop('login')
     return render_template('authorize.html')
 
 

@@ -38,7 +38,7 @@ def save_PDF(ls_book, name_pdf):
     pdf.set_draw_color(0, 0, 0)
     pdf.line(11, 20, 202, 20)
 
-    # Для исправленея ошибки переполнения списка
+    # # Для исправленея ошибки переполнения списка
     # if len(ls_book) > 47:
     #     ls_book = ls_book[:47]
 
