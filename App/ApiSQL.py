@@ -51,6 +51,8 @@ class Class_Sql:
         row = cursor.fetchall()
         print('row: ',row)
         ls = [col[0] for col in row]
+        if not bool(ls):
+            ls = ['<null>']
         print('ls: ', ls)
         s = ls[0].replace('<null>', '')
         return s
