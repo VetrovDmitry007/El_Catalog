@@ -167,7 +167,7 @@ def delTemFile(fd, path):
     :return:
     """
     print('Запуск удаления:', path)
-    tim = 30
+    tim = 20
     time.sleep(tim)
     # закрываем дескриптор файла
     os.close(fd)

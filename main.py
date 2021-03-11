@@ -48,14 +48,14 @@ def find():
     :return: Список словарей
     """
     if request.method == 'POST':
-        ls_id = findBook(request.form)
-        marc = Class_Sql()
-        ls_book = marc.getSpisBook(ls_id)
         if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
                 session["login"].strip() == ec_cfg.loginMarc):
-            fd, path = uploadPDF(ls_book)
-            StartThreadDel(fd, path)
-            return render_template('tabResult.html', ls_book=ls_book, patch_pdf=path)
+            ls_id = findBook(request.form)
+            marc = Class_Sql()
+            ls_book = marc.getSpisBook(ls_id)
+            session.pop('find_ls_book')
+            session['find_ls_book'] = ls_book
+            return render_template('tabResult.html', ls_book=ls_book)
         else:
             return render_template('authorize.html')
 
@@ -93,15 +93,30 @@ def upload_file(book_id):
         return render_template('find.html')
 
 
-@app.route('/MarcWeb/export/<patch_pdf>')
-@app.route('/export/<patch_pdf>')
-def getPdf(patch_pdf):
+@app.route('/MarcWeb/result_find')
+@app.route('/result_find')
+def return_list():
+    """
+    Возвращает на страницу результата поиска
+    :return:
+    """
+    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
+            session["login"].strip() == ec_cfg.loginMarc):
+        return render_template('tabResult.html', ls_book=session['find_ls_book'])
+    return render_template('authorize.html')
+
+
+@app.route('/MarcWeb/getPdf')
+@app.route('/getPdf')
+def getPdf():
     """
     Выгрузка пользователю результата поиска в виде PDF файла
-    :param patch_pdf: Путь к временному PDF файлу
+    через передачу списка с пом. сессии
     :return: PDF файл
     """
-    return send_file(patch_pdf)
+    fd, path = uploadPDF(session['find_ls_book'])
+    StartThreadDel(fd, path)
+    return send_file(path)
 
 
 if __name__ == '__main__':
