@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, send_file, request
+from flask import Flask, render_template, session, send_file, request, redirect, url_for
 from App.LibMetod import *
 from App import ec_cfg
 
@@ -18,9 +18,8 @@ def index():
 @app.route('/MarcWeb/exit')
 @app.route('/exit')
 def session_exit():
-    session.pop('psw')
-    session.pop('login')
-    return render_template('authorize.html')
+    session.clear()
+    return redirect(url_for('index'))
 
 
 @app.route('/MarcWeb/login', methods=['GET', 'POST'])
@@ -36,8 +35,7 @@ def authoriz():
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
             session["login"].strip() == ec_cfg.loginMarc):
         return render_template('find.html')
-    else:
-        return render_template('authorize.html')
+    return redirect(url_for('index'))
 
 
 @app.route('/MarcWeb/find', methods=['POST'])
@@ -53,11 +51,9 @@ def find():
             ls_id = findBook(request.form)
             marc = Class_Sql()
             ls_book = marc.getSpisBook(ls_id)
-            session.pop('find_ls_book')
             session['find_ls_book'] = ls_book
             return render_template('tabResult.html', ls_book=ls_book)
-        else:
-            return render_template('authorize.html')
+        return redirect(url_for('index'))
 
 
 @app.route('/MarcWeb/book/<id>')
@@ -72,8 +68,7 @@ def infoBook(id):
             session["login"].strip() == ec_cfg.loginMarc):
         ls_tag = getInfoBook(id)
         return render_template('infoBook.html', ls_tag=ls_tag, book_id=id)
-    else:
-        return render_template('authorize.html')
+    return redirect(url_for('index'))
 
 
 @app.route('/MarcWeb/upload/<book_id>')
@@ -89,8 +84,8 @@ def upload_file(book_id):
         fd, path = tpl
         StartThreadDel(fd, path)
         return send_file(path)  # посмотреть справку по send_file()
-    else:  # если файл макрообъекта не создан
-        return render_template('find.html')
+    # если файл макрообъекта не создан
+    return redirect(url_for('find'))
 
 
 @app.route('/MarcWeb/result_find')
@@ -103,7 +98,7 @@ def return_list():
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
             session["login"].strip() == ec_cfg.loginMarc):
         return render_template('tabResult.html', ls_book=session['find_ls_book'])
-    return render_template('authorize.html')
+    return redirect(url_for('index'))
 
 
 @app.route('/MarcWeb/getPdf')
