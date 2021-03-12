@@ -104,7 +104,7 @@ def upload_file(book_id):
         StartThreadDel(fd, path)
         return send_file(path)  # посмотреть справку по send_file()
     # если файл макрообъекта не создан
-    return redirect(url_for('find'))
+    return redirect(url_for('getFrmFind'))
 
 
 @app.route('/MarcWeb/result_find')
