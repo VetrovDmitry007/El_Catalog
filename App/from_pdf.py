@@ -87,7 +87,7 @@ def save_PDF(ls_book, name_pdf):
                     if fr == 1:
                         word_ls_v = umn_rasp([st1], j[0], word_ls_v)
                     else:
-                        word_ls_v = umn_rasp(st, j[0], word_ls_v, poz='-')
+                        word_ls_v = umn_rasp(st1, j[0], word_ls_v, poz='-')
                     fl = 1
 
                 if j[0] == '100a' and len(st) >= 17:
