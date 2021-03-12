@@ -38,7 +38,7 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a href="/login" class="nav-link active" aria-current="page" href="#">
+            <a href="/f_find" class="nav-link active" aria-current="page">
               <span data-feather="home"></span>
               Поиск
             </a>
@@ -80,22 +80,16 @@
     <div class="container">
     <div class="bor-foms" style="border-width: 1px; margin-top: 10px;">
     <form action="/find" method="post">
+        {{ form.hidden_tag() }}
 
     <div class="row">
         <div class="col-11 col-sm-5">
         <label class="form-label"></label>
-        <select name="select_1" class="form-select form-select-sm" style="background-color: #f2f8ff;" aria-label=".form-select-sm example">
-            <option value="245a" selected>Заглавие</option>
-            <option value="100a">Автор</option>
-            <option value="260b">Издательство</option>
-            <option value="SUJET">Рубрика</option>
-            <option value="THESAURUS">Название тезауруса</option>
-            <option value="010 a">ISBN</option>
-        </select>
+            {{ form.select_1(class="form-select form-select-sm", style="background-color: #f2f8ff;") }}
         </div>
         <div class="col-11 col-sm-5">
             <label class="form-label"></label>
-            <input name="edit_1" type="text" class="form-control" style="background-color: #f2f8ff;" placeholder="Значение поля">
+            {{ form.edit_1(class="form-control", style="background-color: #f2f8ff;", placeholder="Значение поля") }}
         </div>
     </div>
 
@@ -109,18 +103,11 @@
         </div>
         <div class="col-9 col-sm-4">
         <label class="form-label"></label>
-        <select name="select_2" class="form-select form-select-sm" style="background-color: #f2f8ff;" aria-label=".form-select-sm example">
-            <option value="245a" >Заглавие</option>
-            <option value="100a" selected>Автор</option>
-            <option value="260b">Издательство</option>
-            <option value="SUJET">Рубрика</option>
-            <option value="THESAURUS">Название тезауруса</option>
-            <option value="010a">ISBN</option>
-        </select>
+            {{ form.select_2(class="form-select form-select-sm", style="background-color: #f2f8ff;") }}
         </div>
         <div class="col-11 col-sm-5">
             <label class="form-label"></label>
-            <input name="edit_2" type="text" class="form-control" style="background-color: #f2f8ff;" placeholder="Значение поля">
+            {{ form.edit_2(class="form-control", style="background-color: #f2f8ff;", placeholder="Значение поля") }}
         </div>
     </div>
 
@@ -134,18 +121,11 @@
         </div>
         <div class="col-9 col-sm-4">
         <label class="form-label"></label>
-        <select name="select_3" class="form-select form-select-sm" style="background-color: #f2f8ff;" aria-label=".form-select-sm example">
-            <option value="245a" >Заглавие</option>
-            <option value="100a">Автор</option>
-            <option value="260b" selected>Издательство</option>
-            <option value="SUJET">Рубрика</option>
-            <option value="THESAURUS">Название тезауруса</option>
-            <option value="010a">ISBN</option>
-        </select>
+            {{ form.select_3(class="form-select form-select-sm", style="background-color: #f2f8ff;") }}
         </div>
         <div class="col-11 col-sm-5">
             <label class="form-label"></label>
-            <input name="edit_3" type="text" class="form-control" style="background-color: #f2f8ff;" placeholder="Значение поля">
+            {{ form.edit_3(class="form-control", style="background-color: #f2f8ff;", placeholder="Значение поля") }}
         </div>
     </div>
 
@@ -159,25 +139,19 @@
         </div>
         <div class="col-9 col-sm-4">
         <label class="form-label"></label>
-        <select name="select_4" class="form-select form-select-sm" style="background-color: #f2f8ff;" aria-label=".form-select-sm example">
-            <option value="245a" >Заглавие</option>
-            <option value="100a">Автор</option>
-            <option value="260b">Издательство</option>
-            <option value="SUJET" selected>Рубрика</option>
-            <option value="THESAURUS">Название тезауруса</option>
-            <option value="010f">ISBN</option>
-        </select>
+            {{ form.select_4(class="form-select form-select-sm", style="background-color: #f2f8ff;") }}
         </div>
         <div class="col-11 col-sm-5">
             <label class="form-label"></label>
-            <input name="edit_4" type="text" class="form-control" style="background-color: #f2f8ff;" placeholder="Значение поля">
+            {{ form.edit_4(class="form-control", style="background-color: #f2f8ff;", placeholder="Значение поля") }}
         </div>
     </div>
 
     <br>
     <div class="row">
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Поиск</button>
+<!--            <button type="submit" class="btn btn-primary">Поиск</button>-->
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </div>
 

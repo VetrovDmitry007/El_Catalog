@@ -5,6 +5,16 @@ from sys import platform
 
 
 class Class_Sql:
+    """
+    Класс менеджера запросов к MSSQL
+    Методы
+    --------
+    getIdBook() -- Поиск книги по словарю
+    getValTeg() -- Возвращает значение тэга указанной книги
+    getOneBook() -- Возвращает разобранное библиографическое описание книги
+    getSpisBook() -- Возвращает список найденных книг
+    loadFromSql() -- Извлекает файл из таблицы макрообъектов
+    """
 
     def __init__(self):
         dir_prog = os.path.dirname(os.path.abspath(__file__))

@@ -53,14 +53,34 @@ def parsTeg(st):
     return dc_res
 
 
-def findBook(mdc):
+def DataForm2Dict(f_form):
+    """
+    Перевод данных объектов формы в словарь
+    :param f_form:
+    :return: Словарь вида {'edit_1': 'Заглавие', ...}
+    """
+    mdc = dict()
+    mdc['edit_1'] = f_form.edit_1.data
+    mdc['edit_2'] = f_form.edit_2.data
+    mdc['edit_3'] = f_form.edit_3.data
+    mdc['edit_4'] = f_form.edit_4.data
+    mdc['select_1'] = f_form.select_1.data
+    mdc['select_2'] = f_form.select_2.data
+    mdc['select_3'] = f_form.select_3.data
+    mdc['select_4'] = f_form.select_4.data
+    return mdc
+
+
+def findBook(f_form):
     """
     Поиск книг в форме поиска
-    :param mdc: => 'werkzeug.datastructures.ImmutableMultiDict'
+    :param f_form: Объект формы
     :return: Список ID найденных книг
     """
-    marc = Class_Sql()
+    mdc = DataForm2Dict(f_form)
+    print(mdc)
 
+    marc = Class_Sql()
     set_full, set_id_2, set_id_3, set_id_4 = set(), set(), set(), set()
 
     if mdc['edit_1'] != '':
