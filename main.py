@@ -94,6 +94,7 @@ def infoBook(id):
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
             session["login"].strip() == ec_cfg.loginMarc):
         ls_tag = getInfoBook(id)
+        print('Биб. описание', ls_tag)
         return render_template('infoBook.html', ls_tag=ls_tag, book_id=id)
     return redirect(url_for('index'))
 
