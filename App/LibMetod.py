@@ -9,6 +9,7 @@ import os
 import time
 from threading import Thread
 from App.from_pdf import save_PDF
+from App.from_pdf_info_book import made_pdf
 
 
 # coding = UTF-8
@@ -177,6 +178,19 @@ def uploadPDF(ls_book):
     save_PDF(ls_book=ls_book, name_pdf=path)
     return fd, path
 
+def infoUploadPDF(ls_book):
+    """
+    Создаёт временный PDF файл (результат поиска)
+    :param ls_book: Список книг
+    :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
+    """
+    # Устанавливаем каталог программы
+    dir_prog = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(dir_prog)
+    # создаем временный файл
+    fd, path = tempfile.mkstemp(suffix='.pdf', text=True, dir='upload')
+    made_pdf(list_book=ls_book, name_pdf=path)
+    return fd, path
 
 def delTemFile(fd, path):
     """

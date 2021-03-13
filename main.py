@@ -78,7 +78,7 @@ def find():
         ls_book = marc.getSpisBook(ls_id)
         # Список -> json -> Скрытый элемент формы
         hide_form = HideForm()
-        hide_form.json_txt.data=json.dumps(ls_book)
+        hide_form.json_txt.data = json.dumps(ls_book)
         return render_template('tabResult.html', ls_book=ls_book, form=hide_form)
     return redirect(url_for('index'))
 
@@ -94,8 +94,12 @@ def infoBook(id):
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
             session["login"].strip() == ec_cfg.loginMarc):
         ls_tag = getInfoBook(id)
-        print('Биб. описание', ls_tag)
-        return render_template('infoBook.html', ls_tag=ls_tag, book_id=id)
+
+        hide_form = HideForm()
+        hide_form.json_txt.data = json.dumps(ls_tag)
+
+        # print('Биб. описание', ls_tag)
+        return render_template('infoBook.html', ls_tag=ls_tag, book_id=id, form=hide_form)
     return redirect(url_for('index'))
 
 
@@ -141,6 +145,19 @@ def getPdf():
     hide_form = HideForm()
     ls_book = json.loads(hide_form.json_txt.data)
     fd, path = uploadPDF(ls_book)
+    StartThreadDel(fd, path)
+    return send_file(path)
+
+
+@app.route('/MarcWeb/book/infoBookgetPdf', methods=['POST'])
+@app.route('/infoBookletPdf', methods=['POST'])
+def infoBookgetPdf():
+    """
+
+    """
+    hide_form = HideForm()
+    ls_info = json.loads(hide_form.json_txt.data)
+    fd, path = infoUploadPDF(ls_info)
     StartThreadDel(fd, path)
     return send_file(path)
 

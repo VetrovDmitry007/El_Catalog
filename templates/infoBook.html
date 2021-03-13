@@ -57,7 +57,7 @@
 <!--            </a>-->
 <!--          </li>-->
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="#" onclick="document.getElementById('form-pdf').submit();">
               <span data-feather="shopping-cart"></span>
               Экспорт
             </a>
@@ -101,6 +101,12 @@
         </div>
         {%endfor%}
       </div>
+    </main>
+
+<form id="form-pdf" action="/infoBookletPdf" method="post">
+  {{form.hidden_tag()}}
+  {{ form.json_txt() }}
+</form>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 </body>
