@@ -1,7 +1,9 @@
+import json
+
 from flask import Flask, render_template, session, send_file, request, redirect, url_for
 from App.LibMetod import *
 from App import ec_cfg
-from App.Forms import LoginForm, FindForm
+from App.Forms import LoginForm, FindForm, HideForm
 
 app = Flask(__name__, static_folder='static')
 app.debug = ec_cfg.debugFlask
@@ -66,12 +68,18 @@ def find():
     """
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
             session["login"].strip() == ec_cfg.loginMarc):
+        """
+        Добавить поиск и удаление файлов старше одного часа
+        """
+        # Получаем элементы формы и формируем список книг
         find_form = FindForm()
         ls_id = findBook(find_form)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
-        session['find_ls_book'] = ls_book
-        return render_template('tabResult.html', ls_book=ls_book)
+        # Список -> json -> Скрытый элемент формы
+        hide_form = HideForm()
+        hide_form.json_txt.data=json.dumps(ls_book)
+        return render_template('tabResult.html', ls_book=ls_book, form=hide_form)
     return redirect(url_for('index'))
 
 
@@ -111,6 +119,7 @@ def upload_file(book_id):
 @app.route('/result_find')
 def return_list():
     """
+    !!! Не используется
     Возвращает на страницу результата поиска
     :return:
     """
@@ -120,15 +129,17 @@ def return_list():
     return redirect(url_for('index'))
 
 
-@app.route('/MarcWeb/getPdf')
-@app.route('/getPdf')
+@app.route('/MarcWeb/getPdf', methods=['POST'])
+@app.route('/getPdf', methods=['POST'])
 def getPdf():
     """
     Выгрузка пользователю результата поиска в виде PDF файла
-    через передачу списка с пом. сессии
+    через передачу списка с json и скрытой формы
     :return: PDF файл
     """
-    fd, path = uploadPDF(session['find_ls_book'])
+    hide_form = HideForm()
+    ls_book = json.loads(hide_form.json_txt.data)
+    fd, path = uploadPDF(ls_book)
     StartThreadDel(fd, path)
     return send_file(path)
 

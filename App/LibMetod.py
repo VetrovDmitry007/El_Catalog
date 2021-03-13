@@ -186,6 +186,8 @@ def delTemFile(fd, path):
     :param path: Полное имя файла
     :return:
     """
+    if not os.path.exists(path):
+        return None
     print('Запуск удаления:', path)
     tim = 20
     time.sleep(tim)

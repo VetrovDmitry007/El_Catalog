@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, HiddenField
 from wtforms.validators import DataRequired
+from wtforms.widgets import TextArea
 
 
 class LoginForm(FlaskForm):
@@ -26,3 +27,11 @@ class FindForm(FlaskForm):
     select_3 = SelectField(choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'), ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN') ])
     select_4 = SelectField(choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'), ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN') ])
     submit = SubmitField('Поиск')
+
+class HideForm(FlaskForm):
+    """
+    Класс скрытой формы для хранения
+    json списка найденной литературы
+    """
+    # json_txt = StringField(u'Text', widget=TextArea())
+    json_txt = HiddenField(u'Text')
