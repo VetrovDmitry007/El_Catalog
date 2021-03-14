@@ -3,7 +3,13 @@ import re
 
 
 def made_pdf(list_book, name_pdf):
-    pdf = fpdf.FPDF(format='legal')  # pdf format
+    """
+    Создает pdf файл с информацией о книге
+    :param list_book:
+    :param name_pdf:
+    :return: True, file-pdf
+    """
+    pdf = fpdf.FPDF(format='legal')
     pdf.add_page()
     pdf.add_font('DejaVu_Bold', '', './Font/DejaVuSans-Bold.ttf', uni=True)
     pdf.set_font('DejaVu_Bold', '', 12)
@@ -17,15 +23,17 @@ def made_pdf(list_book, name_pdf):
     pdf.set_line_width(0.5)
     pdf.set_draw_color(0, 0, 0)
     pdf.line(11, 30, 202, 30)
-
+    # Выводит в pdf файл элементы списка
     for list_el in list_book:
         pdf.cell(65, 5, txt=list_el[0])
         st2 = list_el[1]
+        # Разделяет большие строки и выводит их в pdf файл
         while len(st2) > 60:
             st = st2[:60]
             st = re.split(r'\W', st)
             del st[-1]
             st2 = re.split(r'\W', st2)
+            # Удаляет повторяющиеся элементы
             for el in range(len(st)):
                 del st2[0]
             st = ' '.join(st).strip()
@@ -33,10 +41,9 @@ def made_pdf(list_book, name_pdf):
             pdf.cell(15, 5, txt=st, ln=1)
             pdf.cell(65, 5, txt='')
             list_el[1] = st2
-
         pdf.cell(15, 5, txt=list_el[1])
         pdf.cell(0, 8, txt='', ln=1)
-
+    # Создает pdf файл с именем name_pdf
     pdf.output(name_pdf)
     return True
 

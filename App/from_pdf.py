@@ -8,21 +8,21 @@ def save_PDF(ls_book, name_pdf):
     :param ls_book: Список книг
     :return:
     """
-    # print(ls_book)
-    ls = [7, 35, 70, 65, 15]
-    ls_k = [7, 35, 70, 65, 15]
+    # otstup и otstup_2 это списки хрянящие расстояние между словами
+    otstup = [7, 35, 70, 65, 15]
+    otstup_2 = [7, 35, 70, 65, 15]
+    # word_ls и word_ls_v списки слов
     word_ls = []
     word_ls_v = ['', '', '', '', '']
+    cn, cn2 = -1, -1
     num = 0
-    fr = 0
-    cn = -1
+    first_fl = 0
     fl = 0
-    ls3 = []
+    ls = []
     max_ls = []
-    cn3 = -1
     sch = 0
 
-    pdf = fpdf.FPDF(format='legal')  # pdf format
+    pdf = fpdf.FPDF(format='legal')
     pdf.add_page()
     pdf.add_font('DejaVu_Bold', '', './Font/DejaVuSans-Bold.ttf', uni=True)
     pdf.set_font('DejaVu_Bold', '', 10)
@@ -38,6 +38,7 @@ def save_PDF(ls_book, name_pdf):
     pdf.set_draw_color(0, 0, 0)
     pdf.line(11, 20, 202, 20)
 
+    # независимая позиция элемента
     def umn_rasp(el, key, ls, poz=''):
         if poz == '':
             if key == 'id':
@@ -66,7 +67,7 @@ def save_PDF(ls_book, name_pdf):
     # # Для исправленея ошибки переполнения списка
     # if len(ls_book) > 47:
     #     ls_book = ls_book[:47]
-
+    # Разделение строки
     for dc_teg in ls_book:
         for j in dc_teg.items():
             if str(j[0]) == 'id':
@@ -75,7 +76,7 @@ def save_PDF(ls_book, name_pdf):
             if str(j[0]) != 'id' and str(j[0]) != '900a':
                 st = j[1]
                 while len(st) > 30:
-                    fr += 1
+                    first_fl += 1
                     st1 = st[:30]
                     st = re.split(r'\W', st)
                     st1 = re.split(r'\W', st1)
@@ -84,7 +85,7 @@ def save_PDF(ls_book, name_pdf):
                         del st[0]
                     st1 = ' '.join(st1)
                     st = ' '.join(st)
-                    if fr == 1:
+                    if first_fl == 1:
                         word_ls_v = umn_rasp([st1], j[0], word_ls_v)
                     else:
                         word_ls_v = umn_rasp(st1, j[0], word_ls_v, poz='-')
@@ -96,14 +97,14 @@ def save_PDF(ls_book, name_pdf):
                     word_ls_v = umn_rasp(st, j[0], word_ls_v)
                 else:
                     word_ls_v = umn_rasp(st, j[0], word_ls_v, poz='-')
-                fr = 0
+                first_fl = 0
                 fl = 0
         word_ls += word_ls_v.copy()
-
+    # Запись в файл
     for i in range(len(word_ls) + 1):
         cn += 1
         if cn == 5:
-            for x in ls3:
+            for x in ls:
                 if type(x) == list:
                     max_ls.append(len(x))
             if len(max_ls) > 0:
@@ -113,31 +114,31 @@ def save_PDF(ls_book, name_pdf):
             for j in range(max_ch):
                 sch += 1
                 pdf.cell(0, 5, txt='', ln=1)
-                for y in ls3:
-                    cn3 += 1
-                    if cn3 == 5:
-                        cn3 = 0
+                for y in ls:
+                    cn2 += 1
+                    if cn2 == 5:
+                        cn2 = 0
                     try:
                         if type(y) == list:
-                            pdf.cell(ls_k[cn3], 2, txt=y[sch].strip())
+                            pdf.cell(otstup_2[cn2], 2, txt=y[sch].strip())
                         else:
-                            pdf.cell(ls_k[cn3], 0, txt='')
+                            pdf.cell(otstup_2[cn2], 0, txt='')
                     except:
-                        cn3 = -1
+                        cn2 = -1
                         break
-            cn3 = -1
+            cn2 = -1
             sch = 0
             pdf.cell(0, 10, txt = '', ln = 1)
             max_ls = []
             max_ch = 0
-            ls3 = []
+            ls = []
             cn = 0
         try:
             if type(word_ls[i]) == list:
-                pdf.cell(ls[cn], 3, txt=word_ls[i][0])
+                pdf.cell(otstup[cn], 3, txt=word_ls[i][0])
             else:
-                pdf.cell(ls[cn], 3, txt=word_ls[i])
-            ls3.append(word_ls[i])
+                pdf.cell(otstup[cn], 3, txt=word_ls[i])
+            ls.append(word_ls[i])
         except:
             break
 
