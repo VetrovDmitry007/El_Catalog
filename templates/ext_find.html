@@ -44,7 +44,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/ext_find" class="nav-link">
+            <a class="nav-link">
               <span data-feather="file"></span>
               Расширенный поиск
             </a>
@@ -56,7 +56,7 @@
 
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2 head_text">Электронный каталог</h1>
+        <h1 class="h2 head_text" >Электронный каталог</h1>
       </div>
 
       <h4 style="color: #4d759c; margin-bottom: 5px;">Поиск книги.</h4>
@@ -128,6 +128,43 @@
         <div class="col-11 col-sm-5">
             <label class="form-label"></label>
             {{ form.edit_4(class="form-control", style="background-color: #f2f8ff;", placeholder="Значение поля") }}
+        </div>
+    </div>
+
+    <!-- Фильтр по типу документа -->
+    <div class="row">
+        <div class="col-2 col-sm-1">
+        <label class="form-label"></label>
+        <select name="select_5_0" class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <option value="ИЛИ" selected>или</option>
+            <option value="И">и</option>
+        </select>
+        </div>
+
+        <div class="col-9 col-sm-4">
+            <label class="form-label"></label>
+            {{ form.edit_6(class="form-control", style="background-color: #f2f8ff;") }}
+        </div>
+
+        <div class="col-11 col-sm-5">
+        <label class="form-label"></label>
+            {{ form.select_5(class="form-select form-select-sm", style="background-color: #f2f8ff;") }}
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-2 col-sm-1">
+        <label class="form-label"></label>
+        <select name="select_6_0" class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <option value="ИЛИ" selected>или</option>
+            <option value="И">и</option>
+        </select>
+        </div>
+        <div class="col-10 col-sm-9">
+            <label class="form-label"></label>
+            {{ form.edit_5(class="form-control", style="background-color: #f2f8ff;", placeholder="Ключевые слова") }}
         </div>
     </div>
 

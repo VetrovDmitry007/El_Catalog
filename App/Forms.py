@@ -8,7 +8,7 @@ class LoginForm(FlaskForm):
     """
     Класс формы авторизации пользователя
     """
-    username = StringField(label='Имя пользователя', validators= [DataRequired()])
+    username = StringField(label='Имя пользователя', validators=[DataRequired()])
     password = PasswordField(label='Пароль', validators=[DataRequired()])
     remember_me = BooleanField(label='Запомнить меня')
     submit = SubmitField('Вход')
@@ -22,11 +22,49 @@ class FindForm(FlaskForm):
     edit_2 = StringField()
     edit_3 = StringField()
     edit_4 = StringField()
-    select_1 = SelectField(choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'), ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN') ])
-    select_2 = SelectField(choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'), ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN') ])
-    select_3 = SelectField(choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'), ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN') ])
-    select_4 = SelectField(choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'), ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN') ])
+    select_1 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    select_2 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    select_3 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    select_4 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
     submit = SubmitField('Поиск')
+
+
+class ExFindForm(FlaskForm):
+    """
+    Класс формы расширенного поиска
+    """
+    edit_1 = StringField()
+    edit_2 = StringField()
+    edit_3 = StringField()
+    edit_4 = StringField()
+    select_1 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    select_2 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    select_3 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    select_4 = SelectField(
+        choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
+                 ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
+    edit_5 = StringField(label='Ключевые слова')
+    # Типы документов
+    select_5 = SelectField(
+        choices=[('', 'Все типы документов'), ('', 'Книга'), ('', 'Периодическое издание'), ('', 'Выпуск'),
+                 ('', 'Статья'), ('', 'Электронный ресурс'), ('', 'Библиографический список'), ('', 'Диссертация ')])
+    edit_6 = StringField(render_kw={'value': '', 'readonly': True})
+    submit = SubmitField('Поиск')
+
 
 class HideForm(FlaskForm):
     """

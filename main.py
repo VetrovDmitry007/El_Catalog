@@ -3,7 +3,7 @@ import json
 from flask import Flask, render_template, session, send_file, request, redirect, url_for
 from App.LibMetod import *
 from App import ec_cfg
-from App.Forms import LoginForm, FindForm, HideForm
+from App.Forms import LoginForm, FindForm, HideForm, ExFindForm
 
 app = Flask(__name__, static_folder='static')
 app.debug = ec_cfg.debugFlask
@@ -59,6 +59,18 @@ def getFrmFind():
     return render_template('find.html', form=find_form)
 
 
+@app.route('/MarcWeb/ext_find', methods=['GET', 'POST'])
+@app.route('/ext_find', methods=['GET', 'POST'])
+def getFrmExFind():
+    """
+    Возвращает форму расширенного поиска
+    :return: Форма расширенного поиска
+    """
+    ext_find_form = ExFindForm()
+    ext_find_form.edit_6.render_kw['value'] = 'Тип документа'
+    return render_template('ext_find.html', form=ext_find_form)
+
+
 @app.route('/MarcWeb/find', methods=['POST'])
 @app.route('/find', methods=['POST'])
 def find():
@@ -83,23 +95,23 @@ def find():
     return redirect(url_for('index'))
 
 
-@app.route('/MarcWeb/book/<id>')
-@app.route('/book/<id>')
-def infoBook(id):
+@app.route('/MarcWeb/book/<id_b>')
+@app.route('/book/<id_b>')
+def infoBook(id_b):
     """
     Возвращает библиографическое описание книги
-    :param id: ID книги
+    :param id_b: ID книги
     :return: Форма библиографическое описание книги
     """
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
             session["login"].strip() == ec_cfg.loginMarc):
-        ls_tag = getInfoBook(id)
+        ls_tag = getInfoBook(id_b)
 
         hide_form = HideForm()
         hide_form.json_txt.data = json.dumps(ls_tag)
 
         # print('Биб. описание', ls_tag)
-        return render_template('infoBook.html', ls_tag=ls_tag, book_id=id, form=hide_form)
+        return render_template('infoBook.html', ls_tag=ls_tag, book_id=id_b, form=hide_form)
     return redirect(url_for('index'))
 
 
@@ -152,8 +164,9 @@ def getPdf():
 @app.route('/MarcWeb/book/infoBookgetPdf', methods=['POST'])
 @app.route('/infoBookletPdf', methods=['POST'])
 def infoBookgetPdf():
-    """
+    """Выгрузка пользователю инфо о книге в виде PDF
 
+    :return:
     """
     hide_form = HideForm()
     ls_info = json.loads(hide_form.json_txt.data)
