@@ -5,8 +5,8 @@ from sys import platform
 
 
 class Class_Sql:
-    """
-    Класс менеджера запросов к MSSQL
+    """Класс менеджера запросов к MSSQL
+
     Методы
     --------
     getIdBook() -- Поиск книги по словарю
@@ -26,8 +26,8 @@ class Class_Sql:
             self.cnxn = pyodbc.connect(ec_cfg.win_conn)
 
     def getIdBook(self, tag, val_tag, prec=False):
-        """
-        Поиск книги по словарю
+        """Поиск книги по словарю
+
         :param tag: Тэг поля книги (100а, 245a, ...)
         :param val_tag: Значение поля
         :param prec: Точное совпадение (True / False)
@@ -43,6 +43,19 @@ class Class_Sql:
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
+        return ls
+
+    def getBookKeyword(self, pr):
+        """
+        Возвращает название книг по ключевому слову
+        :param pr: Параметр пользователя
+        :return: Список книг
+        """
+        cursor = self.cnxn.cursor()
+        sql = f"SELECT a.IDX_ID, MAX(x.DOC_ID) as max_, TERM FROM IDX653a as a, IDX653aX as x where a.IDX_ID=x.IDX_ID and a.TERM like '{pr}%' GROUP BY a.TERM, a.IDX_ID"
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        ls = [col[1] for col in row]
         return ls
 
     def getValTeg(self, tag, book_id):

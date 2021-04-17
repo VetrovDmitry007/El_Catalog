@@ -14,6 +14,7 @@ from App.from_pdf_info_book import made_pdf
 
 # coding = UTF-8
 
+
 def parsTeg(st):
     """
     Функция разбивает текст описани на тэги формата MARC
@@ -72,9 +73,81 @@ def DataForm2Dict(f_form):
     return mdc
 
 
-def findBook(f_form):
+def DataForm2DictEx(f_form):
     """
-    Поиск книг в форме поиска
+    Перевод данных объектов формы в словарь расширенного поиска
+    :param f_form:
+    :return: Словарь вида {'edit_1': 'Заглавие', ...}
+    """
+    mdc = dict()
+    mdc['edit_1'] = f_form.edit_1.data
+    mdc['edit_2'] = f_form.edit_2.data
+    mdc['edit_3'] = f_form.edit_3.data
+    mdc['edit_4'] = f_form.edit_4.data
+    mdc['edit_5'] = f_form.edit_5.data
+    mdc['edit_6'] = f_form.edit_6.data
+    mdc['select_1'] = f_form.select_1.data
+    mdc['select_2'] = f_form.select_2.data
+    mdc['select_3'] = f_form.select_3.data
+    mdc['select_4'] = f_form.select_4.data
+    mdc['select_5'] = f_form.select_5.data
+    return mdc
+
+def findExBook(f_form):
+    """Поиск книг в форме расширенного поиска
+
+        :param f_form: Объект формы
+        :return: Список ID найденных книг
+        """
+    mdc = DataForm2DictEx(f_form)
+    print(mdc)
+
+    marc = Class_Sql()
+    set_full, set_id_2, set_id_3, set_id_4 = set(), set(), set(), set()
+
+    if mdc['edit_1'] != '':
+        tag = [mdc['select_1'], mdc['edit_1']]  # {'100a': 'Иванов'}
+        set_full = set(marc.getIdBook(tag[0], tag[1]))
+
+    if mdc['edit_2'] != '':
+        tag = [mdc['select_2'], mdc['edit_2']]
+        set_id_2 = set(marc.getIdBook(tag[0], tag[1]))
+        if mdc['select_2_0'] == 'ИЛИ':
+            set_full = set_full | set_id_2
+        else:
+            set_full = set_full & set_id_2
+
+    if mdc['edit_3'] != '':
+        tag = [mdc['select_3'], mdc['edit_3']]
+        set_id_3 = set(marc.getIdBook(tag[0], tag[1]))
+        if mdc['select_3_0'] == 'ИЛИ':
+            set_full = set_full | set_id_3
+        else:
+            set_full = set_full & set_id_3
+
+    if mdc['edit_4'] != '':
+        tag = [mdc['select_4'], mdc['edit_4']]
+        set_id_4 = set(marc.getIdBook(tag[0], tag[1]))
+        if mdc['select_4_0'] == 'ИЛИ':
+            set_full = set_full | set_id_4
+        else:
+            set_full = set_full & set_id_4
+
+    if mdc['edit_5'] != '':
+        tag = [mdc['select_5'], mdc['edit_5']]
+        set_id_5 = set(marc.getBookKeyword(tag[1]))
+        if mdc['select_5'] == 'или':
+            print('ok')
+            set_full = set_full | set_id_5
+        else:
+            print('not ok')
+            set_full = set_full & set_id_5
+
+    return set_full
+
+def findBook(f_form):
+    """Поиск книг в форме поиска
+
     :param f_form: Объект формы
     :return: Список ID найденных книг
     """

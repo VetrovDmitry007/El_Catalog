@@ -5,6 +5,7 @@ from App.LibMetod import *
 from App import ec_cfg
 from App.Forms import LoginForm, FindForm, HideForm, ExFindForm
 
+
 app = Flask(__name__, static_folder='static')
 app.debug = ec_cfg.debugFlask
 app.config['SECRET_KEY'] = ec_cfg.SECRET_KEY
@@ -62,20 +63,19 @@ def getFrmFind():
 @app.route('/MarcWeb/ext_find', methods=['GET', 'POST'])
 @app.route('/ext_find', methods=['GET', 'POST'])
 def getFrmExFind():
-    """
-    Возвращает форму расширенного поиска
+    """Возвращает форму расширенного поиска
+
     :return: Форма расширенного поиска
     """
     ext_find_form = ExFindForm()
-    ext_find_form.edit_6.render_kw['value'] = 'Тип документа'
     return render_template('ext_find.html', form=ext_find_form)
 
 
 @app.route('/MarcWeb/find', methods=['POST'])
 @app.route('/find', methods=['POST'])
 def find():
-    """
-    Возвращает список найденной литературы
+    """Возвращает список найденной литературы
+
     :return: Список словарей
     """
     if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
@@ -86,6 +86,32 @@ def find():
         # Получаем элементы формы и формируем список книг
         find_form = FindForm()
         ls_id = findBook(find_form)
+        marc = Class_Sql()
+        ls_book = marc.getSpisBook(ls_id)
+        # Список -> json -> Скрытый элемент формы
+        hide_form = HideForm()
+        hide_form.json_txt.data = json.dumps(ls_book)
+        print(ls_id, ls_book)
+        return render_template('tabResult.html', ls_book=ls_book, form=hide_form)
+    return redirect(url_for('index'))
+
+
+@app.route('/MarcWeb/ext_find', methods=['POST'])
+@app.route('/bt_ext_find', methods=['POST'])
+def findEx():
+    """Возвращает список найденной литературы в расширенном поиске
+
+    :return: Список словарей
+    """
+    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
+            session["login"].strip() == ec_cfg.loginMarc):
+        """
+        Добавить поиск и удаление файлов старше одного часа
+        """
+        # Получаем элементы формы и формируем список книг
+        print('Получаем элементы формы и формируем список книг')
+        find_form = ExFindForm()
+        ls_id = findExBook(find_form)
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
         # Список -> json -> Скрытый элемент формы
