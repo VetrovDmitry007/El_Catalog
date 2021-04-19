@@ -62,6 +62,16 @@ class ExFindForm(FlaskForm):
     select_5 = SelectField(
         choices=[('', 'Все типы документов'), ('', 'Книга'), ('', 'Периодическое издание'), ('', 'Выпуск'),
                  ('', 'Статья'), ('', 'Электронный ресурс'), ('', 'Библиографический список'), ('', 'Диссертация ')])
+    select_2_0 = SelectField(
+        choices=[('или', 'или'), ('и', 'и')])
+    select_3_0 = SelectField(
+        choices=[('или', 'или'), ('и', 'и')])
+    select_4_0 = SelectField(
+        choices=[('или', 'или'), ('и', 'и')])
+    select_5_0 = SelectField(
+        choices=[('или', 'или'), ('и', 'и')])
+    select_6_0 = SelectField(
+        choices=[('или', 'или'), ('и', 'и')])
     edit_6 = StringField(render_kw={'value': '', 'readonly': True})
     submit = SubmitField('Поиск')
 
