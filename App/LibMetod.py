@@ -166,26 +166,29 @@ def findBook(f_form):
     if mdc['edit_2'] != '':
         tag = [mdc['select_2'], mdc['edit_2']]
         set_id_2 = set(marc.getIdBook(tag[0], tag[1]))
-        if mdc['select_2_0'] == 'ИЛИ':
-            set_full = set_full | set_id_2
-        else:
-            set_full = set_full & set_id_2
+        # if mdc['select_2_0'] == 'ИЛИ':
+        #     set_full = set_full | set_id_2
+        # else:
+        #     set_full = set_full & set_id_2
+        set_full = set_full & set_id_2
 
     if mdc['edit_3'] != '':
         tag = [mdc['select_3'], mdc['edit_3']]
         set_id_3 = set(marc.getIdBook(tag[0], tag[1]))
-        if mdc['select_3_0'] == 'ИЛИ':
-            set_full = set_full | set_id_3
-        else:
-            set_full = set_full & set_id_3
+        # if mdc['select_3_0'] == 'ИЛИ':
+        #     set_full = set_full | set_id_3
+        # else:
+        #     set_full = set_full & set_id_3
+        set_full = set_full & set_id_3
 
     if mdc['edit_4'] != '':
         tag = [mdc['select_4'], mdc['edit_4']]
         set_id_4 = set(marc.getIdBook(tag[0], tag[1]))
-        if mdc['select_4_0'] == 'ИЛИ':
-            set_full = set_full | set_id_4
-        else:
-            set_full = set_full & set_id_4
+        # if mdc['select_4_0'] == 'ИЛИ':
+        #     set_full = set_full | set_id_4
+        # else:
+        #     set_full = set_full & set_id_4
+        set_full = set_full & set_id_4
 
     return set_full
 
