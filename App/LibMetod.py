@@ -74,8 +74,8 @@ def DataForm2Dict(f_form):
 
 
 def DataForm2DictEx(f_form):
-    """
-    Перевод данных объектов формы в словарь расширенного поиска
+    """Перевод данных объектов формы в словарь расширенного поиска
+
     :param f_form:
     :return: Словарь вида {'edit_1': 'Заглавие', ...}
     """
@@ -90,7 +90,7 @@ def DataForm2DictEx(f_form):
     mdc['select_2'] = f_form.select_2.data
     mdc['select_3'] = f_form.select_3.data
     mdc['select_4'] = f_form.select_4.data
-    mdc['select_5'] = f_form.select_5.data
+    mdc['select_6'] = f_form.select_6.data
     mdc['select_2_0'] = f_form.select_2_0.data
     mdc['select_3_0'] = f_form.select_3_0.data
     mdc['select_4_0'] = f_form.select_4_0.data
@@ -108,7 +108,7 @@ def findExBook(f_form):
     print(mdc)
 
     marc = Class_Sql()
-    set_full, set_id_2, set_id_3, set_id_4 = set(), set(), set(), set()
+    set_full, set_id_2, set_id_3, set_id_4, set_id_5, set_id_6 = set(), set(), set(), set(), set(), set()
 
     if mdc['edit_1'] != '':
         tag = [mdc['select_1'], mdc['edit_1']]  # {'100a': 'Иванов'}
@@ -138,10 +138,17 @@ def findExBook(f_form):
         else:
             set_full = set_full & set_id_4
 
-    if mdc['edit_5'] != '':
-        tag = [mdc['select_5'], mdc['edit_5']]
-        set_id_5 = set(marc.getBookKeyword(tag[1]))
+    if mdc['select_6'] != '--':
+        set_id_6 = set(marc.getBookMObj())
         if mdc['select_6_0'] == 'или':
+            set_full = set_full | set_id_6
+        else:
+            set_full = set_full & set_id_6
+
+    if mdc['edit_5'] != '':
+        key_w = mdc['edit_5']
+        set_id_5 = set(marc.getBookKeyword(key_w))
+        if mdc['select_5_0'] == 'или':
             set_full = set_full | set_id_5
         else:
             set_full = set_full & set_id_5
@@ -154,8 +161,6 @@ def findBook(f_form):
     :return: Список ID найденных книг
     """
     mdc = DataForm2Dict(f_form)
-    print(mdc)
-
     marc = Class_Sql()
     set_full, set_id_2, set_id_3, set_id_4 = set(), set(), set(), set()
 
@@ -166,28 +171,16 @@ def findBook(f_form):
     if mdc['edit_2'] != '':
         tag = [mdc['select_2'], mdc['edit_2']]
         set_id_2 = set(marc.getIdBook(tag[0], tag[1]))
-        # if mdc['select_2_0'] == 'ИЛИ':
-        #     set_full = set_full | set_id_2
-        # else:
-        #     set_full = set_full & set_id_2
         set_full = set_full & set_id_2
 
     if mdc['edit_3'] != '':
         tag = [mdc['select_3'], mdc['edit_3']]
         set_id_3 = set(marc.getIdBook(tag[0], tag[1]))
-        # if mdc['select_3_0'] == 'ИЛИ':
-        #     set_full = set_full | set_id_3
-        # else:
-        #     set_full = set_full & set_id_3
         set_full = set_full & set_id_3
 
     if mdc['edit_4'] != '':
         tag = [mdc['select_4'], mdc['edit_4']]
         set_id_4 = set(marc.getIdBook(tag[0], tag[1]))
-        # if mdc['select_4_0'] == 'ИЛИ':
-        #     set_full = set_full | set_id_4
-        # else:
-        #     set_full = set_full & set_id_4
         set_full = set_full & set_id_4
 
     return set_full
@@ -213,15 +206,14 @@ def getInfoBook(book_id):
         ['Объём', dc_tag.get('300a', None)],
         ['Макрообъект', dc_tag.get('900a', None)],
     ]
-
     ls_result = [st for st in ls_result if st[1] is not None]
     ls_result = [st for st in ls_result if len(st[1]) > 3]
     return ls_result
 
 
 def uploadFile(book_id):
-    """
-    Создаем временный файл макрообъекта
+    """Создаем временный файл макрообъекта
+
     :param book_id: ID книги
     :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
@@ -236,15 +228,14 @@ def uploadFile(book_id):
         return None
     # создаем временный файл
     fd, path = tempfile.mkstemp(suffix='.' + xtd, text=True, dir='upload')
-    # print('создаем временный файл:', path)
     with open(path, 'wb') as f:
         f.write(data)
     return fd, path
 
 
 def uploadPDF(ls_book):
-    """
-    Создаёт временный PDF файл (результат поиска)
+    """Создаёт временный PDF файл (результат поиска)
+
     :param ls_book: Список книг
     :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
@@ -257,8 +248,8 @@ def uploadPDF(ls_book):
     return fd, path
 
 def infoUploadPDF(ls_book):
-    """
-    Создаёт временный PDF файл (результат поиска)
+    """Создаёт временный PDF файл (результат поиска)
+
     :param ls_book: Список книг
     :return: кортэж (fd - Дескриптор файла, path - Полное имя файла)
     """
@@ -271,8 +262,8 @@ def infoUploadPDF(ls_book):
     return fd, path
 
 def delTemFile(fd, path):
-    """
-    Функция для запуска в потоке
+    """Функция для запуска в потоке
+
     Через промежуток времени tim удаляет вменный файл
     :param fd: Дескриптор файла
     :param path: Полное имя файла
@@ -291,8 +282,8 @@ def delTemFile(fd, path):
 
 
 def StartThreadDel(fd, path):
-    """
-    Запуск потока обработки удаления временного файла
+    """Запуск потока обработки удаления временного файла
+
     :param fd: Дескриптор файла
     :param path: Полное имя файла
     :return:

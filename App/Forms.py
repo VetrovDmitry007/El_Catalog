@@ -18,7 +18,7 @@ class FindForm(FlaskForm):
     """
     Класс формы поиска
     """
-    edit_1 = StringField()
+    edit_1 = StringField(render_kw ={'autofocus': True})
     edit_2 = StringField()
     edit_3 = StringField()
     edit_4 = StringField()
@@ -41,10 +41,13 @@ class ExFindForm(FlaskForm):
     """
     Класс формы расширенного поиска
     """
-    edit_1 = StringField()
+    edit_1 = StringField(render_kw ={'autofocus': True})
     edit_2 = StringField()
     edit_3 = StringField()
     edit_4 = StringField()
+    edit_5 = StringField(label='Ключевые слова')
+    edit_6 = StringField(render_kw ={'readonly': True, 'value':'Макрообъект'})
+
     select_1 = SelectField(
         choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
                  ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
@@ -57,11 +60,10 @@ class ExFindForm(FlaskForm):
     select_4 = SelectField(
         choices=[('245a', 'Заглавие'), ('100a', 'Автор'), ('260b', 'Издательство'), ('SUJET', 'Рубрика'),
                  ('THESAURUS', 'Название тезауруса'), ('010a', 'ISBN')])
-    edit_5 = StringField(label='Ключевые слова')
-    # Типы документов
-    select_5 = SelectField(
-        choices=[('', 'Все типы документов'), ('', 'Книга'), ('', 'Периодическое издание'), ('', 'Выпуск'),
-                 ('', 'Статья'), ('', 'Электронный ресурс'), ('', 'Библиографический список'), ('', 'Диссертация ')])
+    # Макрообъекты
+    select_6 = SelectField(
+        choices=[ ('--', '--'), ('Да', 'Да')])
+
     select_2_0 = SelectField(
         choices=[('или', 'или'), ('и', 'и')])
     select_3_0 = SelectField(
@@ -70,9 +72,10 @@ class ExFindForm(FlaskForm):
         choices=[('или', 'или'), ('и', 'и')])
     select_5_0 = SelectField(
         choices=[('или', 'или'), ('и', 'и')])
+    # Макрообъекты
     select_6_0 = SelectField(
         choices=[('или', 'или'), ('и', 'и')])
-    edit_6 = StringField(render_kw={'value': '', 'readonly': True})
+
     submit = SubmitField('Поиск')
 
 

@@ -45,11 +45,23 @@ class Class_Sql:
         ls = [col[0] for col in row]
         return ls
 
-    def getBookKeyword(self, pr):
+    def getBookMObj(self):
+        """Возвращает список книг по наличию макрообъекта
+
+        :return: Список ID книг
         """
-        Возвращает название книг по ключевому слову
-        :param pr: Параметр пользователя
-        :return: Список книг
+        cursor = self.cnxn.cursor()
+        sql = f"SELECT a.IDX_ID, MAX(x.DOC_ID) as max_ FROM IDX900a as a, IDX900aX as x where a.IDX_ID=x.IDX_ID GROUP BY a.IDX_ID"
+        cursor.execute(sql)
+        row = cursor.fetchall()
+        ls = [col[1] for col in row]
+        return ls
+
+    def getBookKeyword(self, pr):
+        """Возвращает список книг по ключевому слову
+
+        :param pr: Ключевые слова
+        :return: Список ID книг
         """
         cursor = self.cnxn.cursor()
         sql = f"SELECT a.IDX_ID, MAX(x.DOC_ID) as max_, TERM FROM IDX653a as a, IDX653aX as x where a.IDX_ID=x.IDX_ID and a.TERM like '{pr}%' GROUP BY a.TERM, a.IDX_ID"
@@ -59,17 +71,17 @@ class Class_Sql:
         return ls
 
     def getValTeg(self, tag, book_id):
-        """
-        Возвращает значение тэга указанной книги
+        """Возвращает значение тэга указанной книги
+
         :param teg: Тэг поля
         :param book_id: Id книги
         :return: Значение тэга
         """
         cursor = self.cnxn.cursor()
         sql = f"SELECT IDX{tag}.TERM FROM IDX{tag}X, IDX{tag} where IDX{tag}X.DOC_ID = {book_id} and IDX{tag}X.IDX_ID = IDX{tag}.IDX_ID"
-        if ec_cfg.debugSQL:
-            print('getValTeg()')
-            print(sql)
+        # if ec_cfg.debugSQL:
+        #     print('getValTeg()')
+        #     print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
@@ -79,8 +91,8 @@ class Class_Sql:
         return s
 
     def getOneBook(self, book_id):
-        """
-        Возвращает разобранное библиографическое описание книги
+        """Возвращает разобранное библиографическое описание книги
+
         :param book_id: ID книги
         :return: Библиографическое описание книги
         """
@@ -92,8 +104,8 @@ class Class_Sql:
         return txt_book
 
     def getSpisBook(self, ls_id):
-        """
-        Возвращает список найденных книг
+        """Возвращает список найденных книг
+
         :param ls_id: Список ID книг
         :return: список словарей (автор, заглавие, издательство, объём)
         """
@@ -111,8 +123,8 @@ class Class_Sql:
         return ls
 
     def loadFromSql(self, book_id):
-        """
-        Извлекает файл из таблицы макрообъектов
+        """Извлекает файл из таблицы макрообъектов
+
         :param book_id: ID Книги
         :return: data, xtd
         data: Бинарный файл

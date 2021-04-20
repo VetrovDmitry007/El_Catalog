@@ -112,6 +112,8 @@ def findEx():
         print('Получаем элементы формы и формируем список книг')
         find_form = ExFindForm()
         ls_id = findExBook(find_form)
+        if len(ls_id)> 2000:
+            return render_template('overflowResult.html', count=len(ls_id))
         marc = Class_Sql()
         ls_book = marc.getSpisBook(ls_id)
         # Список -> json -> Скрытый элемент формы
@@ -124,8 +126,8 @@ def findEx():
 @app.route('/MarcWeb/book/<id_b>')
 @app.route('/book/<id_b>')
 def infoBook(id_b):
-    """
-    Возвращает библиографическое описание книги
+    """Возвращает библиографическое описание книги
+
     :param id_b: ID книги
     :return: Форма библиографическое описание книги
     """
