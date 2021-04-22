@@ -35,7 +35,7 @@ class Class_Sql:
         """
         cursor = self.cnxn.cursor()
         sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}' "
-        sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '{val_tag}%'"
+        sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '%{val_tag}%'"
         sql = sql_prec if prec else sql_approx
         if ec_cfg.debugSQL:
             print('getIdBook()')
@@ -64,7 +64,7 @@ class Class_Sql:
         :return: Список ID книг
         """
         cursor = self.cnxn.cursor()
-        sql = f"SELECT a.IDX_ID, MAX(x.DOC_ID) as max_, TERM FROM IDX653a as a, IDX653aX as x where a.IDX_ID=x.IDX_ID and a.TERM like '{pr}%' GROUP BY a.TERM, a.IDX_ID"
+        sql = f"SELECT a.IDX_ID, MAX(x.DOC_ID) as max_, TERM FROM IDX653a as a, IDX653aX as x where a.IDX_ID=x.IDX_ID and a.TERM like '%{pr}%' GROUP BY a.TERM, a.IDX_ID"
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[1] for col in row]
