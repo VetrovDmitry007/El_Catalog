@@ -34,9 +34,10 @@ class Class_Sql:
         :return: Список DOC_ID
         """
         cursor = self.cnxn.cursor()
-        sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}' "
+        # sql_prec = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM = '{val_tag}' "
         sql_approx = f"SELECT IDX{tag}X.DOC_ID FROM IDX{tag}, IDX{tag}X where IDX{tag}.IDX_ID = IDX{tag}X.IDX_ID and IDX{tag}.TERM like '%{val_tag}%'"
-        sql = sql_prec if prec else sql_approx
+        # sql = sql_prec if prec else sql_approx
+        sql = sql_approx
         if ec_cfg.debugSQL:
             print('getIdBook()')
             print(sql)
@@ -79,9 +80,9 @@ class Class_Sql:
         """
         cursor = self.cnxn.cursor()
         sql = f"SELECT IDX{tag}.TERM FROM IDX{tag}X, IDX{tag} where IDX{tag}X.DOC_ID = {book_id} and IDX{tag}X.IDX_ID = IDX{tag}.IDX_ID"
-        # if ec_cfg.debugSQL:
-        #     print('getValTeg()')
-        #     print(sql)
+        if ec_cfg.debugSQL:
+            print('getValTeg()')
+            print(sql)
         cursor.execute(sql)
         row = cursor.fetchall()
         ls = [col[0] for col in row]
