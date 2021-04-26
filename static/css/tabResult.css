@@ -2,6 +2,11 @@
     color: #4d759c;
 }
 
+.head_text_2{
+    color: #4d759c;
+    font-size: calc(1.0rem + 0.4vw);
+}
+
 .sidebar .nav-link {
     font-weight: 500;
     color: #333;
