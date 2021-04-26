@@ -37,3 +37,8 @@ cursor: pointer;
 .bg-dark {
     background-color: #6090bf!important;
 }
+
+.label_and{
+    padding-top: 4px;
+    padding-left: 25px;
+}
