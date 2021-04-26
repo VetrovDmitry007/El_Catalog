@@ -24,6 +24,12 @@ def index():
     return render_template('authorize.html', form=login_form)
 
 
+#404 page
+@app.errorhandler(404)
+def page_not_found(e):
+    time.sleep(20)
+    return ''
+
 @app.route('/MarcWeb/exit')
 @app.route('/exit')
 def session_exit():
@@ -146,8 +152,8 @@ def infoBook(id_b):
 @app.route('/MarcWeb/upload/<book_id>')
 @app.route('/upload/<book_id>')
 def upload_file(book_id):
-    """
-    Выгрузка пользователю макрообъекта
+    """Выгрузка пользователю макрообъекта
+
     :param book_id: ID книги
     :return: Файл макрообъекта
     """
@@ -158,20 +164,6 @@ def upload_file(book_id):
         return send_file(path)  # посмотреть справку по send_file()
     # если файл макрообъекта не создан
     return redirect(url_for('getFrmFind'))
-
-
-@app.route('/MarcWeb/result_find')
-@app.route('/result_find')
-def return_list():
-    """
-    !!! Не используется
-    Возвращает на страницу результата поиска
-    :return:
-    """
-    if ('psw' in session) and (session["psw"].strip() == ec_cfg.pswMarc) and (
-            session["login"].strip() == ec_cfg.loginMarc):
-        return render_template('tabResult.html', ls_book=session['find_ls_book'])
-    return redirect(url_for('index'))
 
 
 @app.route('/MarcWeb/getPdf', methods=['POST'])
